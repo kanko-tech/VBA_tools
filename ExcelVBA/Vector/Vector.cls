@@ -10,7 +10,7 @@ Attribute VB_GlobalNameSpace = False    'グローバル名前空間に公開す
 Attribute VB_Creatable = False          '外部（他アプリ）から CreateObject で生成できるか（False：外部から生成不可（通常）、True：COMとして公開する場合のみ使用）  
 Attribute VB_PredeclaredId = False      'Newせずとも使用可とするか（Trueにするとシングルトン的挙動に。通常はFalse）
 Attribute VB_Exposed = False            'クラスを外部に公開するか（通常はFalse）
-Option Explicit                         '変数の明示宣言を強制
+Option Explicit                         '型宣言を強制
 
 '----------------------------
 ' プロパティ
@@ -22,98 +22,118 @@ Private VECTOR_IS_LOADED As Boolean     '
 ' 読込系
 '----------------------------
 Public Sub Read_ColRange(ByVal rng As Range)
-    If rng Is Nothing Then Err.Raise vbObjectError + 1001, "Vector.Read_ColRange", "rng  Nothing "
+    If rng Is Nothing Then Err.Raise vbObjectError + 1001, "Vector.Read_ColRange", "引数rngがNothingです。"
     
+    If rng.Columns.Count <> 1 Then
+        Err.Raise vbObjectError + 1002, "Vector.Read_ColRange", "1列のRangeのみ指定してください。"
+    End If
+
     If rng.Cells.Count = 1 Then
         Dim tmp1(1 To 1) As Variant
         tmp1(1) = rng.value
-        mOneDim = tmp1
+        VECTOR = tmp1
     Else
-        ' �cRange �� 1�����z��
-        mOneDim = Application.index(rng.value, 0, 1)
+        VECTOR = Application.index(rng.value, 0, 1)
     End If
     
-    mLoaded = True
+    VECTOR_IS_LOADED = True
 End Sub
 
 Public Sub Read_RowRange(ByVal rng As Range)
-    If rng Is Nothing Then Err.Raise vbObjectError + 1002, "Vector.Read_RowRange", "rng �� Nothing �ł��B"
+    If rng Is Nothing Then Err.Raise vbObjectError + 1010, "Vector.Read_RowRange", "引数rngがNothingです。"
     
+    If rng.Rows.Count <> 1 Then
+        Err.Raise vbObjectError + 1012, "Vector.Read_RowRange", "1行のRangeのみ指定してください。"
+    End If
+
     If rng.Cells.Count = 1 Then
         Dim tmp1(1 To 1) As Variant
         tmp1(1) = rng.value
-        mOneDim = tmp1
+        VECTOR = tmp1
     Else
-        ' ��Range �� 1�����z��
-        mOneDim = Application.index(rng.value, 1, 0)
+        VECTOR = Application.index(rng.value, 1, 0)
     End If
     
-    mLoaded = True
+    VECTOR_IS_LOADED = True
 End Sub
 
 Public Sub Read_Array(ByVal arr As Variant)
     If Not IsArray(arr) Then
-        Err.Raise vbObjectError + 1003, "Vector.Read_Array", "�z��ł͂���܂���B"
+        Err.Raise vbObjectError + 1030, "Vector.Read_Array", "配列ではありません。"
     End If
     
-    ' 1�������`�F�b�N�i2�������� UBound(arr,2) �����Ă��܂��j
-    On Error Resume Next
+    ' 1次元配列チェック
+    On Error Resume Next    '以後、エラーが起きてもその場で停止せず、次の行へ進む
     Dim t As Long
-    t = UBound(arr, 2)
-    If Err.Number = 0 Then
+    t = UBound(arr, 2)      'UBound(arr, 2) が失敗するかどうかを使って、次元数を判定（2次元以上なら UBound(arr, 2) が通ってしまう）
+    If Err.Number = 0 Then  '成功(0)なら2次元以上のためエラー
         Err.Clear
         On Error GoTo 0
-        Err.Raise vbObjectError + 1004, "Vector.Read_Array", "2�����z��͎󂯕t���܂���i1�����̂݁j�B"
+        Err.Raise vbObjectError + 1031, "Vector.Read_Array", "2次元以上の配列は受け付けません（1次元のみ）。"
     End If
     Err.Clear
     On Error GoTo 0
     
-    mOneDim = arr
-    mLoaded = True
+    VECTOR = arr
+    VECTOR_IS_LOADED = True
+End Sub
+
+Private Sub EnsureLoaded(Optional ByVal caller As String = "")
+    If Not VECTOR_IS_LOADED Then
+        Dim msg As String
+        msg = "データが読み込まれていません。Read_ColRange / Read_RowRange / Read_Array を先に呼び出してください。"
+        
+        If caller <> "" Then
+            msg = msg & vbCrLf & "呼び出し元: " & caller
+        End If        
+        Err.Raise vbObjectError + 1099, _
+                  "Vector.EnsureLoaded", _
+                  msg
+    End If
 End Sub
 
 '----------------------------
-' �Q�ƌn�i�������߁j
+' 参照系
 '----------------------------
 Public Property Get IsLoaded() As Boolean
-    IsLoaded = mLoaded
+    IsLoaded = VECTOR_IS_LOADED
 End Property
 
 Public Property Get Data() As Variant
     EnsureLoaded
-    Data = mOneDim
+    Data = VECTOR
 End Property
 
 Public Property Get Count() As Long
     EnsureLoaded
-    Count = UBound(mOneDim) - LBound(mOneDim) + 1
+    Count = UBound(VECTOR) - LBound(VECTOR) + 1
 End Property
 
 Public Property Get Item(ByVal index As Long) As Variant
     EnsureLoaded
-    If index < LBound(mOneDim) Or index > UBound(mOneDim) Then
+    If index < LBound(VECTOR) Or index > UBound(VECTOR) Then
         Err.Raise vbObjectError + 1005, "Vector.Item", "index ���͈͊O�ł��B"
     End If
-    Item = mOneDim(index)
+    Item = VECTOR(index)
 End Property
 
 Public Function TypeNames() As Variant
     EnsureLoaded
     
     Dim lb As Long, ub As Long, i As Long
-    lb = LBound(mOneDim)
-    ub = UBound(mOneDim)
+    lb = LBound(VECTOR)
+    ub = UBound(VECTOR)
     
     Dim res() As Variant
     ReDim res(lb To ub)
     
     For i = lb To ub
-        If IsError(mOneDim(i)) Then
+        If IsError(VECTOR(i)) Then
             res(i) = "Error"
-        ElseIf IsEmpty(mOneDim(i)) Then
+        ElseIf IsEmpty(VECTOR(i)) Then
             res(i) = "Empty"
         Else
-            res(i) = TypeName(mOneDim(i))  ' "Double" "String" "Date" �Ȃ�
+            res(i) = TypeName(VECTOR(i))  ' "Double" "String" "Date" �Ȃ�
         End If
     Next
     
@@ -121,7 +141,7 @@ Public Function TypeNames() As Variant
 End Function
 
 '----------------------------
-' �^����iTransform�j
+' 型系
 '----------------------------
 Public Sub CastToDoubleSafe(Optional ByVal emptyAsZero As Boolean = False, _
                             Optional ByVal invalidAsZero As Boolean = False, _
@@ -129,22 +149,22 @@ Public Sub CastToDoubleSafe(Optional ByVal emptyAsZero As Boolean = False, _
     EnsureLoaded
     
     Dim i As Long
-    For i = LBound(mOneDim) To UBound(mOneDim)
+    For i = LBound(VECTOR) To UBound(VECTOR)
         
-        If IsError(mOneDim(i)) Or IsEmpty(mOneDim(i)) Then
-            mOneDim(i) = IIf(emptyAsZero, 0#, Empty)
+        If IsError(VECTOR(i)) Or IsEmpty(VECTOR(i)) Then
+            VECTOR(i) = IIf(emptyAsZero, 0#, Empty)
         
-        ElseIf VarType(mOneDim(i)) = vbString And Trim$(CStr(mOneDim(i))) = "" Then
-            mOneDim(i) = IIf(emptyAsZero, 0#, Empty)
+        ElseIf VarType(VECTOR(i)) = vbString And Trim$(CStr(VECTOR(i))) = "" Then
+            VECTOR(i) = IIf(emptyAsZero, 0#, Empty)
         
-        ElseIf IsDate(mOneDim(i)) And treatDateAsInvalid Then
-            mOneDim(i) = IIf(invalidAsZero, 0#, Empty)
+        ElseIf IsDate(VECTOR(i)) And treatDateAsInvalid Then
+            VECTOR(i) = IIf(invalidAsZero, 0#, Empty)
         
-        ElseIf IsNumeric(mOneDim(i)) Then
-            mOneDim(i) = CDbl(mOneDim(i))
+        ElseIf IsNumeric(VECTOR(i)) Then
+            VECTOR(i) = CDbl(VECTOR(i))
         
         Else
-            mOneDim(i) = IIf(invalidAsZero, 0#, Empty)
+            VECTOR(i) = IIf(invalidAsZero, 0#, Empty)
         End If
         
     Next i
@@ -155,20 +175,20 @@ Public Sub CastToStringSafe(Optional ByVal emptyAsBlank As Boolean = True, _
     EnsureLoaded
     
     Dim i As Long
-    For i = LBound(mOneDim) To UBound(mOneDim)
+    For i = LBound(VECTOR) To UBound(VECTOR)
         
-        If IsError(mOneDim(i)) Then
+        If IsError(VECTOR(i)) Then
             If errorAsBlank Then
-                mOneDim(i) = ""
+                VECTOR(i) = ""
             Else
                 Err.Raise vbObjectError + 1201, "Vector.CastToStringSafe", "Error�l���܂܂�Ă��܂��B"
             End If
         
-        ElseIf IsEmpty(mOneDim(i)) Then
-            mOneDim(i) = IIf(emptyAsBlank, "", Empty)
+        ElseIf IsEmpty(VECTOR(i)) Then
+            VECTOR(i) = IIf(emptyAsBlank, "", Empty)
         
         Else
-            mOneDim(i) = CStr(mOneDim(i))
+            VECTOR(i) = CStr(VECTOR(i))
         End If
         
     Next i
@@ -178,20 +198,20 @@ Public Sub CastToDateSafe(Optional ByVal invalidAsEmpty As Boolean = True)
     EnsureLoaded
     
     Dim i As Long
-    For i = LBound(mOneDim) To UBound(mOneDim)
+    For i = LBound(VECTOR) To UBound(VECTOR)
         
-        If IsError(mOneDim(i)) Or IsEmpty(mOneDim(i)) Then
-            mOneDim(i) = Empty
+        If IsError(VECTOR(i)) Or IsEmpty(VECTOR(i)) Then
+            VECTOR(i) = Empty
         
-        ElseIf VarType(mOneDim(i)) = vbString And Trim$(CStr(mOneDim(i))) = "" Then
-            mOneDim(i) = Empty
+        ElseIf VarType(VECTOR(i)) = vbString And Trim$(CStr(VECTOR(i))) = "" Then
+            VECTOR(i) = Empty
         
-        ElseIf IsDate(mOneDim(i)) Then
-            mOneDim(i) = CDate(mOneDim(i))
+        ElseIf IsDate(VECTOR(i)) Then
+            VECTOR(i) = CDate(VECTOR(i))
         
         Else
             If invalidAsEmpty Then
-                mOneDim(i) = Empty
+                VECTOR(i) = Empty
             Else
                 Err.Raise vbObjectError + 1202, "Vector.CastToDateSafe", "���t�ɕϊ��ł��Ȃ��l���܂܂�Ă��܂��B"
             End If
@@ -201,14 +221,14 @@ Public Sub CastToDateSafe(Optional ByVal invalidAsEmpty As Boolean = True)
 End Sub
 
 '----------------------------
-' �o�͌n
+' 出力系
 '----------------------------
 Public Sub ToRangeVertical(ByVal topLeft As Range)
     EnsureLoaded
     If topLeft Is Nothing Then Err.Raise vbObjectError + 1006, "Vector.ToRangeVertical", "topLeft �� Nothing �ł��B"
     
     Dim n As Long: n = Me.Count
-    topLeft.Resize(n, 1).value = Application.WorksheetFunction.Transpose(mOneDim)
+    topLeft.Resize(n, 1).value = Application.WorksheetFunction.Transpose(VECTOR)
 End Sub
 
 Public Sub ToRangeHorizontal(ByVal topLeft As Range)
@@ -216,19 +236,10 @@ Public Sub ToRangeHorizontal(ByVal topLeft As Range)
     If topLeft Is Nothing Then Err.Raise vbObjectError + 1007, "Vector.ToRangeHorizontal", "topLeft �� Nothing �ł��B"
     
     Dim n As Long: n = Me.Count
-    topLeft.Resize(1, n).value = mOneDim
+    topLeft.Resize(1, n).value = VECTOR
 End Sub
 
 Public Sub Clear()
-    mOneDim = Empty
-    mLoaded = False
-End Sub
-
-'----------------------------
-' ����
-'----------------------------
-Private Sub EnsureLoaded()
-    If Not mLoaded Then
-        Err.Raise vbObjectError + 1099, "Vector", "�f�[�^�����ǂݍ��݂ł��BRead_ColRange / Read_RowRange / Read_Array ���ɌĂ�ł��������B"
-    End If
+    VECTOR = Empty
+    VECTOR_IS_LOADED = False
 End Sub
