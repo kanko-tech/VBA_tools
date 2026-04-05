@@ -287,6 +287,15 @@ tbl.read_matrix mat, Array("date", "item", "amount")
 | 戻り値 | `Boolean` |
 | 代表ユースケース | 実行前確認、デバッグ確認 |
 
+```vb
+Dim tbl As New Table
+
+Debug.Print tbl.is_loaded
+
+tbl.read_range Sheet1.Range("A1:C4"), hasHeader:=True
+Debug.Print tbl.is_loaded
+```
+
 </details>
 
 <details>
@@ -300,6 +309,13 @@ tbl.read_matrix mat, Array("date", "item", "amount")
 | 戻り値 | `Long` |
 | 代表ユースケース | 件数確認、条件配列長の確認 |
 
+```vb
+Dim tbl As New Table
+
+tbl.read_range Sheet1.Range("A1:C4"), hasHeader:=True
+Debug.Print tbl.row_count
+```
+
 </details>
 
 <details>
@@ -312,6 +328,13 @@ tbl.read_matrix mat, Array("date", "item", "amount")
 | 前提条件 | 読込済みであること |
 | 戻り値 | `Long` |
 | 代表ユースケース | 列構造確認、出力列数確認 |
+
+```vb
+Dim tbl As New Table
+
+tbl.read_range Sheet1.Range("A1:C4"), hasHeader:=True
+Debug.Print tbl.col_count
+```
 
 </details>
 
@@ -327,6 +350,15 @@ tbl.read_matrix mat, Array("date", "item", "amount")
 | 注意点 | 返却後に配列を変更しても内部状態へは直接反映されない |
 | 代表ユースケース | UI 表示、出力列確認 |
 
+```vb
+Dim tbl As New Table
+Dim names As Variant
+
+tbl.read_range Sheet1.Range("A1:C4"), hasHeader:=True
+names = tbl.column_names
+Debug.Print names(1)
+```
+
 </details>
 
 <details>
@@ -340,6 +372,15 @@ tbl.read_matrix mat, Array("date", "item", "amount")
 | 戻り値 | `Matrix` |
 | 注意点 | 返却される `Matrix` は別インスタンス |
 | 代表ユースケース | 低レベルな行列処理へ渡す |
+
+```vb
+Dim tbl As New Table
+Dim mat As Matrix
+
+tbl.read_range Sheet1.Range("A1:C4"), hasHeader:=True
+Set mat = tbl.matrix
+Debug.Print mat.row_count
+```
 
 </details>
 
@@ -404,6 +445,19 @@ Debug.Print scoreVec.mean
 | 注意点 | 空テーブルでは空テーブルを返す |
 | 代表ユースケース | 既に作成済みの条件配列で抽出する |
 
+```vb
+Dim tbl As New Table
+Dim filtered As Table
+Dim mask(1 To 3) As Boolean
+
+tbl.read_range Sheet1.Range("A1:C4"), hasHeader:=True
+mask(1) = True
+mask(2) = False
+mask(3) = True
+
+Set filtered = tbl.filter_by_mask(mask)
+```
+
 </details>
 
 <details>
@@ -456,6 +510,14 @@ Set okRows = tbl.filter_by_equals("status", "OK")
 | 戻り値 | 新しい `Table` |
 | 代表ユースケース | 複数カテゴリ一括抽出 |
 
+```vb
+Dim tbl As New Table
+Dim selectedRows As Table
+
+tbl.read_range Sheet1.Range("A1:C6"), hasHeader:=True
+Set selectedRows = tbl.filter_by_in("status", Array("OK", "PENDING"))
+```
+
 </details>
 
 <details>
@@ -493,6 +555,14 @@ Set hitRows = tbl.filter_by_contains("product_name", "コーヒー")
 | 戻り値 | 新しい `Table` |
 | 代表ユースケース | 複合条件の厳密抽出 |
 
+```vb
+Dim tbl As New Table
+Dim narrowed As Table
+
+tbl.read_range Sheet1.Range("A1:D8"), hasHeader:=True
+Set narrowed = tbl.filter_by_all_equals(Array("status", "category"), Array("OK", "A"))
+```
+
 </details>
 
 <details>
@@ -506,6 +576,14 @@ Set hitRows = tbl.filter_by_contains("product_name", "コーヒー")
 | 入力 | `columnNames As Variant`, `matchValues As Variant` |
 | 戻り値 | 新しい `Table` |
 | 代表ユースケース | いずれか条件に合う行の抽出 |
+
+```vb
+Dim tbl As New Table
+Dim matched As Table
+
+tbl.read_range Sheet1.Range("A1:D8"), hasHeader:=True
+Set matched = tbl.filter_by_any_equals(Array("status", "category"), Array("NG", "B"))
+```
 
 </details>
 
@@ -583,6 +661,13 @@ tbl.add_column "flag"
 | 実行内容 | 列名を差し替え、列名マップを再構築する |
 | 代表ユースケース | 業務用ラベルへの変更、列名正規化 |
 
+```vb
+Dim tbl As New Table
+
+tbl.read_range Sheet1.Range("A1:C4"), hasHeader:=True
+tbl.rename_column "score", "point"
+```
+
 </details>
 
 <details>
@@ -620,6 +705,18 @@ tbl.sort_by "score", ascending:=False
 | 出力 | 内部テーブルを更新 |
 | 実行内容 | `True` 行のみ対象列を `newValue` へ置換する |
 | 代表ユースケース | 条件一致行だけの補正、フラグ更新 |
+
+```vb
+Dim tbl As New Table
+Dim mask(1 To 3) As Boolean
+
+tbl.read_range Sheet1.Range("A1:C4"), hasHeader:=True
+mask(1) = False
+mask(2) = True
+mask(3) = True
+
+tbl.set_by_mask mask, "score", 0
+```
 
 </details>
 
@@ -673,6 +770,13 @@ tbl.set_by_equals "status", "NG", "score", 0
 | 出力 | 内部テーブルを更新 |
 | 実行内容 | 対象列を新しい値配列で全面更新する |
 | 代表ユースケース | 計算済み列の一括反映 |
+
+```vb
+Dim tbl As New Table
+
+tbl.read_range Sheet1.Range("A1:C4"), hasHeader:=True
+tbl.set_column "score", Array(100, 90, 80)
+```
 
 </details>
 
