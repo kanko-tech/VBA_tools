@@ -124,7 +124,7 @@ End Sub
     </tr>
     <tr>
       <td><code>map</code></td>
-      <td>公開関数を各要素へ適用する</td>
+      <td>関数名で指定した変換関数を適用する</td>
     </tr>
     <tr>
       <td rowspan="3">集計</td>
@@ -902,20 +902,21 @@ vec.fill_empty 0
 <details>
 <summary><code>map(ByVal functionName As String)</code></summary>
 
-公開関数を各要素へ適用します。
+関数名で指定した変換関数を各要素へ適用します。  
+VBA では関数参照を直接渡しにくいため、実装上は `Application.Run` で呼べる公開関数名を受け取る高階関数風メソッドです。
 
 | 項目 | 内容 |
 | --- | --- |
 | 前提条件 | 読込済みであること、`functionName` が空でないこと、`Application.Run` で呼べる公開関数があること |
-| 入力 | `functionName As String` |
+| 入力 | `functionName As String` (`Public Function` 名) |
 | 出力 | 内部配列を上書き更新 |
 | 実行内容 | 各要素に対して `(value, index)` を渡して関数実行し、戻り値で置換する |
-| 注意点 | 関数名誤りや実行失敗時はエラー |
+| 注意点 | コールバック関数は `value As Variant, index As Long` の 2 引数を受け取る形で定義する。関数名誤りや実行失敗時はエラー |
 | 代表ユースケース | 独自整形ルールの一括適用 |
 
 ```vb
 Public Function AddPrefix(ByVal value As Variant, ByVal index As Long) As Variant
-    AddPrefix = "ID-" & CStr(value)
+    AddPrefix = "ID" & Format$(index, "00") & "-" & CStr(value)
 End Function
 
 Dim vec As New Vector
@@ -928,9 +929,9 @@ vec.map "AddPrefix"
 
 | 行 | 変換後 |
 | --- | --- |
-| 1 | `"ID-10"` |
-| 2 | `"ID-20"` |
-| 3 | `"ID-30"` |
+| 1 | `"ID01-10"` |
+| 2 | `"ID02-20"` |
+| 3 | `"ID03-30"` |
 
 </details>
 
@@ -1082,21 +1083,6 @@ vec.to_range_vertical Sheet1.Range("H2")
 | 10 |
 | 20 |
 | 30 |
-
-</details>
-
-<details>
-<summary><code>to_range_horizontal(ByVal topLeft As Range)</code></summary>
-
-内部データを横方向に書き戻します。
-
-| 項目 | 内容 |
-| --- | --- |
-| 前提条件 | 読込済みであること、`topLeft` が `Nothing` でないこと |
-| 入力 | `topLeft As Range` |
-| 出力 | ワークシート上のセル範囲 |
-| 実行内容 | `topLeft` を左上として 1 行に書込み |
-| 代表ユースケース | 一次元配列を横持ちで出力する |
 
 </details>
 
