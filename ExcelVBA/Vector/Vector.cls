@@ -78,6 +78,9 @@ Public Sub Read_Array(ByVal arr As Variant)
     VECTOR_IS_LOADED = True
 End Sub
 
+'----------------------------
+' 内部前提系
+'----------------------------
 Private Sub EnsureLoaded(Optional ByVal caller As String = "")
     If Not VECTOR_IS_LOADED Then
         Dim msg As String
