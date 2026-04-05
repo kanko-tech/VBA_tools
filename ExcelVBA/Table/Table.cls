@@ -422,7 +422,7 @@ Public Function col_vector(ByVal columnName As String) As Vector
 End Function
 
 '----------------------------
-' pandas 風操作系
+' 抽出・選択系
 '----------------------------
 Public Function filter_by_mask(ByVal mask As Variant) As Table
     ensure_loaded
@@ -547,6 +547,9 @@ Public Function select_columns(ByVal columnNames As Variant) As Table
     Set select_columns = result
 End Function
 
+'----------------------------
+' 更新・整形系
+'----------------------------
 Public Sub add_column(ByVal columnName As String, Optional ByVal values As Variant)
     ensure_loaded
 
@@ -693,6 +696,9 @@ Public Sub to_range(ByVal topLeft As Range, Optional ByVal includeHeader As Bool
     End If
 End Sub
 
+'----------------------------
+' 状態管理系
+'----------------------------
 Public Sub clear()
     Set DATA = Nothing
     COLUMN_NAMES = Empty

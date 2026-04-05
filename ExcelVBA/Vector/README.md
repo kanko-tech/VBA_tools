@@ -37,7 +37,7 @@ End Sub
 | 初期化必須 | `read_col_range` / `read_row_range` / `read_array` のいずれかを先に実行 |
 | データ形状 | 一次元配列のみ対応 |
 | 添字 | 入力配列の添字を引き継ぐ |
-| 未初期化時 | 参照系・加工系・集計系・出力系はエラー |
+| 未初期化時 | 参照系・条件マスク系・変換・更新系・集計系・出力系はエラー |
 
 ## メソッド早見表
 
@@ -85,7 +85,7 @@ End Sub
       <td>型名配列を返す</td>
     </tr>
     <tr>
-      <td rowspan="5">条件</td>
+      <td rowspan="5">条件マスク</td>
       <td><code>eq</code></td>
       <td>等値判定マスクを返す</td>
     </tr>
@@ -106,7 +106,7 @@ End Sub
       <td>欠損判定マスクを返す</td>
     </tr>
     <tr>
-      <td rowspan="5">加工</td>
+      <td rowspan="5">変換・更新</td>
       <td><code>cast_to_double_safe</code></td>
       <td>数値変換する</td>
     </tr>
@@ -140,7 +140,7 @@ End Sub
       <td>平均を返す</td>
     </tr>
     <tr>
-      <td rowspan="3">出力</td>
+      <td rowspan="2">出力</td>
       <td><code>to_range_vertical</code></td>
       <td>縦に書き戻す</td>
     </tr>
@@ -149,6 +149,7 @@ End Sub
       <td>横に書き戻す</td>
     </tr>
     <tr>
+      <td rowspan="1">状態管理</td>
       <td><code>clear</code></td>
       <td>状態を初期化する</td>
     </tr>
@@ -157,19 +158,23 @@ End Sub
 
 ## 区分ごとの補足
 
-### 条件系メソッドの補足
+### 条件マスク系メソッドの補足
 
 - `eq` `ne` `gt` `ge` `lt` `le` `is_empty` は、後続処理に渡しやすい `Variant` のブール配列を返します。
 - `Table.set_by_mask` や `Matrix.filter_rows` と組み合わせる前提で使うと効果的です。
 
-### 加工系メソッドの補足
+### 変換・更新系メソッドの補足
 
-- 加工系メソッドは内部配列をその場で更新します。
+- 変換・更新系メソッドは内部配列をその場で更新します。
 
 ### 集計系メソッドの補足
 
 - `sum` や `mean` の前に `cast_to_double_safe` を通すと扱いやすくなります。
 - `unique` は最初に出現した値を残す仕様です。
+
+### 状態管理系メソッドの補足
+
+- `clear` はシート出力ではなく、内部状態を未読込状態へ戻すためのメソッドです。
 
 ## よく使うレシピ
 
@@ -465,7 +470,7 @@ result = vec.type_names
 
 </details>
 
-### 条件系
+### 条件マスク系
 
 <details>
 <summary><code>eq(ByVal matchValue As Variant) As Variant</code></summary>
@@ -741,7 +746,7 @@ mask = vec.is_empty(True)
 
 </details>
 
-### 加工系
+### 変換・更新系
 
 <details>
 <summary><code>cast_to_double_safe(Optional emptyAsZero As Boolean = False, Optional invalidAsZero As Boolean = False, Optional treatDateAsInvalid As Boolean = True)</code></summary>
@@ -1122,6 +1127,8 @@ vec.to_range_horizontal Sheet1.Range("H2")
 
 </details>
 
+### 状態管理系
+
 <details>
 <summary><code>clear()</code></summary>
 
@@ -1129,8 +1136,26 @@ vec.to_range_horizontal Sheet1.Range("H2")
 
 | 項目 | 内容 |
 | --- | --- |
-| 実行内容 | 保持配列を破棄し、未読込状態へ戻す |
-| 出力 | 内部状態を初期化 |
-| 代表ユースケース | 再利用前のリセット |
+| 前提条件 | なし |
+| 入力 | なし |
+| 出力 | 内部状態を未読込状態へ戻す |
+| 実行内容 | `VECTOR` を空にし、`is_loaded` が `False` になる |
+| 注意点 | データを保持したままには戻せないため、必要なら `data` を先に取得する |
+| 代表ユースケース | 同じインスタンスを再利用する前に状態をリセットする |
+
+```vb
+Dim vec As New Vector
+
+vec.read_array Array("A", "B", "C")
+vec.clear
+
+Debug.Print vec.is_loaded
+```
+
+実行後イメージ:
+
+| 確認項目 | 値 |
+| --- | --- |
+| `vec.is_loaded` | `False` |
 
 </details>

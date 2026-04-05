@@ -290,6 +290,9 @@ Public Function type_names() As Variant
     type_names = res
 End Function
 
+'----------------------------
+' 条件マスク系
+'----------------------------
 Public Function eq(ByVal matchValue As Variant) As Variant
     eq = build_boolean_mask_equals(matchValue, False)
 End Function
@@ -335,7 +338,7 @@ Public Function is_empty(Optional ByVal treatBlankStringAsEmpty As Boolean = Tru
 End Function
 
 '----------------------------
-' 型・加工系
+' 変換・更新系
 '----------------------------
 Public Sub cast_to_double_safe(Optional ByVal emptyAsZero As Boolean = False, _
                                Optional ByVal invalidAsZero As Boolean = False, _
@@ -504,6 +507,9 @@ Public Sub to_range_horizontal(ByVal topLeft As Range)
     topLeft.Resize(1, n).Value = VECTOR
 End Sub
 
+'----------------------------
+' 状態管理系
+'----------------------------
 Public Sub clear()
     VECTOR = Empty
     VECTOR_IS_LOADED = False

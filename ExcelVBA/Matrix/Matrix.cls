@@ -235,7 +235,7 @@ Public Function col_values(ByVal colIndex As Long) As Variant
 End Function
 
 '----------------------------
-' 行列操作系
+' 抽出・選択系
 '----------------------------
 Public Function filter_rows(ByVal mask As Variant) As Matrix
     ensure_loaded
@@ -354,6 +354,9 @@ Public Function select_columns(ByVal columnIndexes As Variant) As Matrix
     Set select_columns = result
 End Function
 
+'----------------------------
+' 更新・追加系
+'----------------------------
 Public Sub set_column_values(ByVal colIndex As Long, ByVal values As Variant)
     ensure_loaded
     ensure_valid_col_index colIndex, "Matrix.set_column_values"
@@ -436,6 +439,9 @@ Public Sub append_column(ByVal values As Variant)
     End If
 End Sub
 
+'----------------------------
+' 変形系
+'----------------------------
 Public Function transpose() As Matrix
     ensure_loaded
 
@@ -473,6 +479,9 @@ Public Sub to_range(ByVal topLeft As Range)
     topLeft.Resize(MATRIX_ROW_COUNT, MATRIX_COL_COUNT).Value = MATRIX
 End Sub
 
+'----------------------------
+' 状態管理系
+'----------------------------
 Public Sub clear()
     MATRIX = Empty
     MATRIX_IS_LOADED = False
