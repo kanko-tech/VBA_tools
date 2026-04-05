@@ -41,31 +41,137 @@ End Sub
 
 ## メソッド早見表
 
-| 区分 | メソッド | ひとこと |
-| --- | --- | --- |
-| 読込 | `read_col_range` | 1 列の `Range` を読む |
-| 読込 | `read_row_range` | 1 行の `Range` を読む |
-| 読込 | `read_array` | 一次元配列をそのまま読む |
-| 参照 | `is_loaded` | 読込済みかを返す |
-| 参照 | `data` | 内部配列のコピーを返す |
-| 参照 | `count` | 要素数を返す |
-| 参照 | `item` | 指定要素を返す |
-| 参照 | `type_names` | 型名配列を返す |
-| 条件 | `eq` | 等値判定マスクを返す |
-| 条件 | `ne` | 非等値判定マスクを返す |
-| 条件 | `gt` `ge` `lt` `le` | 比較演算マスクを返す |
-| 条件 | `is_empty` | 欠損判定マスクを返す |
-| 加工 | `cast_to_double_safe` | 数値変換する |
-| 加工 | `cast_to_string_safe` | 文字列変換する |
-| 加工 | `cast_to_date_safe` | 日付変換する |
-| 加工 | `fill_empty` | 欠損を埋める |
-| 加工 | `map` | 公開関数を各要素へ適用する |
-| 集計 | `unique` | 重複なし配列を返す |
-| 集計 | `sum` | 合計を返す |
-| 集計 | `mean` | 平均を返す |
-| 出力 | `to_range_vertical` | 縦に書き戻す |
-| 出力 | `to_range_horizontal` | 横に書き戻す |
-| 出力 | `clear` | 状態を初期化する |
+<table>
+  <thead>
+    <tr>
+      <th>区分</th>
+      <th>メソッド</th>
+      <th>ひとこと</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="3">読込</td>
+      <td><code>read_col_range</code></td>
+      <td>1 列の <code>Range</code> を読む</td>
+    </tr>
+    <tr>
+      <td><code>read_row_range</code></td>
+      <td>1 行の <code>Range</code> を読む</td>
+    </tr>
+    <tr>
+      <td><code>read_array</code></td>
+      <td>一次元配列をそのまま読む</td>
+    </tr>
+    <tr>
+      <td rowspan="5">参照</td>
+      <td><code>is_loaded</code></td>
+      <td>読込済みかを返す</td>
+    </tr>
+    <tr>
+      <td><code>data</code></td>
+      <td>内部配列のコピーを返す</td>
+    </tr>
+    <tr>
+      <td><code>count</code></td>
+      <td>要素数を返す</td>
+    </tr>
+    <tr>
+      <td><code>item</code></td>
+      <td>指定要素を返す</td>
+    </tr>
+    <tr>
+      <td><code>type_names</code></td>
+      <td>型名配列を返す</td>
+    </tr>
+    <tr>
+      <td rowspan="6">条件</td>
+      <td><code>eq</code></td>
+      <td>等値判定マスクを返す</td>
+    </tr>
+    <tr>
+      <td><code>ne</code></td>
+      <td>非等値判定マスクを返す</td>
+    </tr>
+    <tr>
+      <td><code>gt</code> <code>ge</code></td>
+      <td>下限条件の比較マスクを返す</td>
+    </tr>
+    <tr>
+      <td><code>lt</code> <code>le</code></td>
+      <td>上限条件の比較マスクを返す</td>
+    </tr>
+    <tr>
+      <td><code>is_empty</code></td>
+      <td>欠損判定マスクを返す</td>
+    </tr>
+    <tr>
+      <td><code>eq</code> / <code>gt</code> など</td>
+      <td><code>Variant</code> のブール配列を返す</td>
+    </tr>
+    <tr>
+      <td rowspan="5">加工</td>
+      <td><code>cast_to_double_safe</code></td>
+      <td>数値変換する</td>
+    </tr>
+    <tr>
+      <td><code>cast_to_string_safe</code></td>
+      <td>文字列変換する</td>
+    </tr>
+    <tr>
+      <td><code>cast_to_date_safe</code></td>
+      <td>日付変換する</td>
+    </tr>
+    <tr>
+      <td><code>fill_empty</code></td>
+      <td>欠損を埋める</td>
+    </tr>
+    <tr>
+      <td><code>map</code></td>
+      <td>公開関数を各要素へ適用する</td>
+    </tr>
+    <tr>
+      <td rowspan="4">集計</td>
+      <td><code>unique</code></td>
+      <td>重複なし配列を返す</td>
+    </tr>
+    <tr>
+      <td><code>sum</code></td>
+      <td>合計を返す</td>
+    </tr>
+    <tr>
+      <td><code>mean</code></td>
+      <td>平均を返す</td>
+    </tr>
+    <tr>
+      <td><code>sum</code> / <code>mean</code></td>
+      <td>数値型に揃えてから使うと安全</td>
+    </tr>
+    <tr>
+      <td rowspan="3">出力</td>
+      <td><code>to_range_vertical</code></td>
+      <td>縦に書き戻す</td>
+    </tr>
+    <tr>
+      <td><code>to_range_horizontal</code></td>
+      <td>横に書き戻す</td>
+    </tr>
+    <tr>
+      <td><code>clear</code></td>
+      <td>状態を初期化する</td>
+    </tr>
+  </tbody>
+</table>
+
+条件系メソッドの補足:
+
+- `eq` `ne` `gt` `ge` `lt` `le` `is_empty` は、後続処理に渡しやすい `Variant` のブール配列を返します。
+- `Table.set_by_mask` や `Matrix.filter_rows` と組み合わせる前提で使うと効果的です。
+
+加工・集計系メソッドの補足:
+
+- 加工系メソッドは内部配列をその場で更新します。
+- `sum` や `mean` の前に `cast_to_double_safe` を通すと扱いやすくなります。
 
 ## よく使うレシピ
 
@@ -106,7 +212,7 @@ Debug.Print scoreVec.mean
 
 ## 詳細仕様
 
-<details open>
+<details>
 <summary><code>read_col_range(ByVal rng As Range)</code></summary>
 
 1 列の `Range` を一次元配列として読み込みます。
@@ -361,7 +467,7 @@ mask = vec.is_empty(True)
 
 </details>
 
-<details open>
+<details>
 <summary><code>cast_to_double_safe(Optional emptyAsZero As Boolean = False, Optional invalidAsZero As Boolean = False, Optional treatDateAsInvalid As Boolean = True)</code></summary>
 
 要素を `Double` に寄せて変換します。
@@ -478,7 +584,7 @@ result = vec.unique()
 
 </details>
 
-<details open>
+<details>
 <summary><code>sum() As Double</code></summary>
 
 合計値を返します。
@@ -613,9 +719,3 @@ vec.to_range_vertical Sheet1.Range("H2")
 | 代表ユースケース | 再利用前のリセット |
 
 </details>
-
-## 補足
-
-- 条件系メソッドは `Variant` のブール配列を返します
-- 加工系メソッドは内部配列をその場で更新します
-- 主要メソッドは開いた状態にしているので、まずそこから読むと全体像を掴みやすいです
