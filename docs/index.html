@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VBA_tools Documentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <p class="eyebrow">GitHub Pages</p>
+      <h1>VBA_tools</h1>
+      <p class="lead">
+        Excel VBA で使う再利用しやすいクラスモジュールをまとめたリポジトリです。
+        現在は <code>Vector</code>、<code>Matrix</code>、<code>Table</code> を中心に、
+        配列と表データの読み込み、加工、出力を扱える構成になっています。
+      </p>
+      <div class="hero-actions">
+        <a href="https://github.com/kanko-tech/VBA_tools" target="_blank" rel="noreferrer">Repository</a>
+        <a href="https://github.com/kanko-tech/VBA_tools/tree/main/ExcelVBA" target="_blank" rel="noreferrer">ExcelVBA Directory</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="panel">
+        <div class="section-heading">
+          <p class="eyebrow">Overview</p>
+          <h2>このリポジトリでできること</h2>
+        </div>
+        <div class="grid two">
+          <article class="card accent-a">
+            <h3>配列処理を部品化</h3>
+            <p>
+              単一列の値をまとめて扱う <code>Vector</code>、二次元配列を表として扱う
+              <code>Matrix</code>、列名つきの実務データを操作する <code>Table</code> を用意しています。
+            </p>
+          </article>
+          <article class="card accent-b">
+            <h3>シート操作を整理</h3>
+            <p>
+              <code>Range</code> から読み込み、配列上で加工し、必要な形でシートへ戻す流れを
+              クラス単位で整理できます。
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-heading">
+          <p class="eyebrow">Directories</p>
+          <h2>ディレクトリ構成</h2>
+        </div>
+        <div class="directory-list">
+          <article class="directory-item">
+            <div>
+              <h3><code>/ExcelVBA</code></h3>
+              <p>Excel VBA 向けのモジュール群と案内 README を置くメインディレクトリです。</p>
+            </div>
+            <a href="https://github.com/kanko-tech/VBA_tools/tree/main/ExcelVBA" target="_blank" rel="noreferrer">Open</a>
+          </article>
+          <article class="directory-item">
+            <div>
+              <h3><code>/ExcelVBA/Vector</code></h3>
+              <p>一次元配列を扱うクラス。列データの比較、型変換、集計の起点に向いています。</p>
+            </div>
+            <a href="https://github.com/kanko-tech/VBA_tools/tree/main/ExcelVBA/Vector" target="_blank" rel="noreferrer">Open</a>
+          </article>
+          <article class="directory-item">
+            <div>
+              <h3><code>/ExcelVBA/Matrix</code></h3>
+              <p>二次元配列を扱うクラス。行抽出、列選択、追記やシート出力まで一通り扱えます。</p>
+            </div>
+            <a href="https://github.com/kanko-tech/VBA_tools/tree/main/ExcelVBA/Matrix" target="_blank" rel="noreferrer">Open</a>
+          </article>
+          <article class="directory-item">
+            <div>
+              <h3><code>/ExcelVBA/Table</code></h3>
+              <p>列名つきテーブルを扱うクラス。業務データの検索、更新、抽出を読みやすく書けます。</p>
+            </div>
+            <a href="https://github.com/kanko-tech/VBA_tools/tree/main/ExcelVBA/Table" target="_blank" rel="noreferrer">Open</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-heading">
+          <p class="eyebrow">Modules</p>
+          <h2>主要モジュールの役割</h2>
+        </div>
+        <div class="grid three">
+          <article class="module-card">
+            <h3>Vector</h3>
+            <ul>
+              <li>1 列または 1 行の <code>Range</code> を読み込む</li>
+              <li>比較マスクを作る</li>
+              <li>欠損補完や安全な型変換を行う</li>
+              <li><code>sum</code>、<code>mean</code>、<code>unique</code> で集計する</li>
+            </ul>
+          </article>
+          <article class="module-card">
+            <h3>Matrix</h3>
+            <ul>
+              <li>矩形 <code>Range</code> を二次元配列として読む</li>
+              <li>行フィルタ、行抽出、列選択を行う</li>
+              <li>列追加や行追加で表を組み替える</li>
+              <li>加工後の表をシートへ一括出力する</li>
+            </ul>
+          </article>
+          <article class="module-card">
+            <h3>Table</h3>
+            <ul>
+              <li>ヘッダーつきの表を読む</li>
+              <li>列名ベースでフィルタや更新を行う</li>
+              <li>並べ替えや列追加を読みやすく書ける</li>
+              <li><code>Matrix</code> と連携して業務データを扱う</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-heading">
+          <p class="eyebrow">Guide</p>
+          <h2>使い分けの目安</h2>
+        </div>
+        <div class="decision-board">
+          <article>
+            <h3>Vector を選ぶ場面</h3>
+            <p>単一列の値をまとめて整形したいときや、比較結果のマスクを作りたいとき。</p>
+          </article>
+          <article>
+            <h3>Matrix を選ぶ場面</h3>
+            <p>列名は不要で、表全体を二次元配列として扱いたいとき。</p>
+          </article>
+          <article>
+            <h3>Table を選ぶ場面</h3>
+            <p>列名つきの実務データに対して、条件抽出や列更新を読みやすく書きたいとき。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-heading">
+          <p class="eyebrow">Quick Start</p>
+          <h2>導入の流れ</h2>
+        </div>
+        <ol class="steps">
+          <li>必要なクラスモジュールを GitHub から取得します。</li>
+          <li>Excel VBA プロジェクトへ <code>Vector.cls</code>、<code>Matrix.cls</code>、<code>Table.cls</code> をインポートします。</li>
+          <li><code>Range</code> から配列や表を読み込み、クラスメソッドで加工します。</li>
+          <li>加工結果をシートへ戻し、業務マクロの中で再利用します。</li>
+        </ol>
+      </section>
+
+      <section class="panel">
+        <div class="section-heading">
+          <p class="eyebrow">Source</p>
+          <h2>参照リンク</h2>
+        </div>
+        <div class="links-grid">
+          <a class="link-tile" href="https://github.com/kanko-tech/VBA_tools/blob/main/ExcelVBA/README.md" target="_blank" rel="noreferrer">
+            <span>ExcelVBA README</span>
+            <small>リポジトリ全体のメモ</small>
+          </a>
+          <a class="link-tile" href="https://github.com/kanko-tech/VBA_tools/blob/main/ExcelVBA/Vector/README.md" target="_blank" rel="noreferrer">
+            <span>Vector README</span>
+            <small>一次元配列モジュール</small>
+          </a>
+          <a class="link-tile" href="https://github.com/kanko-tech/VBA_tools/blob/main/ExcelVBA/Matrix/README.md" target="_blank" rel="noreferrer">
+            <span>Matrix README</span>
+            <small>二次元配列モジュール</small>
+          </a>
+          <a class="link-tile" href="https://github.com/kanko-tech/VBA_tools/blob/main/ExcelVBA/Table/README.md" target="_blank" rel="noreferrer">
+            <span>Table README</span>
+            <small>表データモジュール</small>
+          </a>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
