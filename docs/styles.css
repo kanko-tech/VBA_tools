@@ -237,10 +237,43 @@ main {
   line-height: 1.8;
 }
 
+.plain-list {
+  margin: 0;
+  padding-left: 18px;
+  line-height: 1.85;
+}
+
 .steps {
   margin: 0;
   padding-left: 22px;
   line-height: 1.9;
+}
+
+.detail-hero .lead {
+  max-width: 820px;
+}
+
+.code-block {
+  overflow-x: auto;
+  margin: 0;
+  padding: 20px;
+  border-radius: 20px;
+  background: #1d2b24;
+  color: #f5f8f4;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.code-block.compact {
+  padding: 16px;
+}
+
+.code-block code {
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 0.88rem;
+  line-height: 1.7;
 }
 
 .link-tile {

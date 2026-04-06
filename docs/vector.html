@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vector | VBA_tools</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero detail-hero">
+      <p class="eyebrow">Module Guide</p>
+      <h1>Vector</h1>
+      <p class="lead">
+        単一列または単一行のデータを、比較・整形・集計しやすい形で扱うためのクラスです。
+        条件マスク生成や数値列の前処理をまとめたいときに向いています。
+      </p>
+      <div class="hero-actions">
+        <a href="index.html">Back to Docs</a>
+        <a href="https://github.com/kanko-tech/VBA_tools/blob/main/ExcelVBA/Vector/README.md" target="_blank" rel="noreferrer">Source README</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="panel">
+        <div class="section-heading">
+          <p class="eyebrow">Use Cases</p>
+          <h2>向いている場面</h2>
+        </div>
+        <div class="grid three">
+          <article class="module-card">
+            <h3>列を一括整形</h3>
+            <p>空欄補完、数値変換、文字列変換などを 1 列単位でまとめて処理できます。</p>
+          </article>
+          <article class="module-card">
+            <h3>条件マスク作成</h3>
+            <p><code>eq</code> や <code>gt</code> で作ったマスクを、`Matrix` や `Table` の抽出に渡せます。</p>
+          </article>
+          <article class="module-card">
+            <h3>集計の前処理</h3>
+            <p><code>sum</code> や <code>mean</code> の前に安全な型変換を挟めるので、実務列の整形に向いています。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-heading">
+          <p class="eyebrow">Quick Start</p>
+          <h2>最小例</h2>
+        </div>
+        <pre class="code-block"><code>Sub Sample_Vector_QuickStart()
+    Dim vec As New Vector
+    Dim mask As Variant
+
+    vec.read_col_range Sheet1.Range("B2:B6")
+    vec.fill_empty 0
+    vec.cast_to_double_safe emptyAsZero:=True, invalidAsZero:=True
+
+    mask = vec.gt(100)
+
+    Debug.Print vec.sum
+    Debug.Print vec.mean
+End Sub</code></pre>
+      </section>
+
+      <section class="panel">
+        <div class="section-heading">
+          <p class="eyebrow">Methods</p>
+          <h2>メソッドの見取り図</h2>
+        </div>
+        <div class="grid two">
+          <article class="card">
+            <h3>読込</h3>
+            <ul class="plain-list">
+              <li><code>read_col_range</code>: 1 列の `Range` を読む</li>
+              <li><code>read_row_range</code>: 1 行の `Range` を読む</li>
+              <li><code>read_array</code>: 一次元配列を読む</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>参照</h3>
+            <ul class="plain-list">
+              <li><code>data</code>: 配列コピーを返す</li>
+              <li><code>count</code>: 要素数を返す</li>
+              <li><code>item</code>: 指定要素を返す</li>
+              <li><code>type_names</code>: 型名一覧を返す</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>条件マスク</h3>
+            <ul class="plain-list">
+              <li><code>eq</code> / <code>ne</code>: 一致・不一致判定</li>
+              <li><code>gt</code> / <code>ge</code>: 下限比較</li>
+              <li><code>lt</code> / <code>le</code>: 上限比較</li>
+              <li><code>is_empty</code>: 欠損判定</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>整形と集計</h3>
+            <ul class="plain-list">
+              <li><code>cast_to_double_safe</code>: 数値化</li>
+              <li><code>cast_to_string_safe</code>: 文字列化</li>
+              <li><code>fill_empty</code>: 欠損補完</li>
+              <li><code>sum</code> / <code>mean</code> / <code>unique</code>: 集計</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-heading">
+          <p class="eyebrow">Recipes</p>
+          <h2>よくある使い方</h2>
+        </div>
+        <div class="grid two">
+          <article class="card">
+            <h3>空欄を 0 にして合計する</h3>
+            <pre class="code-block compact"><code>Dim vec As New Vector
+
+vec.read_col_range Sheet1.Range("D2:D8")
+vec.fill_empty 0
+vec.cast_to_double_safe emptyAsZero:=True, invalidAsZero:=True
+
+Debug.Print vec.sum</code></pre>
+          </article>
+          <article class="card">
+            <h3>`Table` と組み合わせる</h3>
+            <pre class="code-block compact"><code>Dim tbl As New Table
+Dim scoreVec As Vector
+
+tbl.read_range Sheet1.Range("A1:D10"), hasHeader:=True
+Set scoreVec = tbl.col_vector("score")
+
+scoreVec.cast_to_double_safe emptyAsZero:=True, invalidAsZero:=True
+Debug.Print scoreVec.mean</code></pre>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

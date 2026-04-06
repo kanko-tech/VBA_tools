@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Matrix | VBA_tools</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero detail-hero">
+      <p class="eyebrow">Module Guide</p>
+      <h1>Matrix</h1>
+      <p class="lead">
+        列名を持たない表データを 2 次元配列として保持し、抽出・選択・追加・出力まで扱う基本クラスです。
+        `Table` より一段低いレベルで表操作を組み立てたいときに向いています。
+      </p>
+      <div class="hero-actions">
+        <a href="index.html">Back to Docs</a>
+        <a href="https://github.com/kanko-tech/VBA_tools/blob/main/ExcelVBA/Matrix/README.md" target="_blank" rel="noreferrer">Source README</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="panel">
+        <div class="section-heading">
+          <p class="eyebrow">Use Cases</p>
+          <h2>向いている場面</h2>
+        </div>
+        <div class="grid three">
+          <article class="module-card">
+            <h3>表全体を配列で扱う</h3>
+            <p>列名なしの矩形データを一括で読み込み、配列中心で加工したいときに向いています。</p>
+          </article>
+          <article class="module-card">
+            <h3>中間表を作る</h3>
+            <p>行抽出や列選択で必要な部分だけを切り出し、次段の処理へ渡せます。</p>
+          </article>
+          <article class="module-card">
+            <h3>`Table` の土台にする</h3>
+            <p>`Matrix` に列名を付けて `Table` に持ち上げる流れにも使えます。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-heading">
+          <p class="eyebrow">Quick Start</p>
+          <h2>最小例</h2>
+        </div>
+        <pre class="code-block"><code>Sub Sample_Matrix_QuickStart()
+    Dim mat As New Matrix
+    Dim filtered As Matrix
+    Dim picked As Matrix
+    Dim mask(1 To 4) As Boolean
+
+    mat.read_range Sheet1.Range("A2:C5")
+
+    mask(1) = True
+    mask(2) = False
+    mask(3) = True
+    mask(4) = False
+
+    Set filtered = mat.filter_rows(mask)
+    Set picked = filtered.select_columns(Array(1, 3))
+
+    picked.to_range Sheet1.Range("F2")
+End Sub</code></pre>
+      </section>
+
+      <section class="panel">
+        <div class="section-heading">
+          <p class="eyebrow">Methods</p>
+          <h2>メソッドの見取り図</h2>
+        </div>
+        <div class="grid two">
+          <article class="card">
+            <h3>読込と参照</h3>
+            <ul class="plain-list">
+              <li><code>read_range</code>: 矩形 `Range` を読む</li>
+              <li><code>read_array</code>: 二次元配列を読む</li>
+              <li><code>read_empty</code>: 空表を作る</li>
+              <li><code>row_count</code> / <code>col_count</code>: 形状確認</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>抽出と選択</h3>
+            <ul class="plain-list">
+              <li><code>filter_rows</code>: 行マスクで抽出</li>
+              <li><code>slice_rows</code>: 指定行だけ抜き出す</li>
+              <li><code>select_columns</code>: 必要列だけ選ぶ</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>更新と追加</h3>
+            <ul class="plain-list">
+              <li><code>set_column_values</code>: 列全体を更新</li>
+              <li><code>append_row</code>: 行追加</li>
+              <li><code>append_column</code>: 列追加</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>変形と出力</h3>
+            <ul class="plain-list">
+              <li><code>transpose</code>: 転置した新しい表を返す</li>
+              <li><code>to_range</code>: シートへ一括出力</li>
+              <li><code>clear</code>: 状態リセット</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-heading">
+          <p class="eyebrow">Recipes</p>
+          <h2>よくある使い方</h2>
+        </div>
+        <div class="grid two">
+          <article class="card">
+            <h3>行抽出して必要列だけ残す</h3>
+            <pre class="code-block compact"><code>Dim mat As New Matrix
+Dim filtered As Matrix
+Dim picked As Matrix
+Dim mask(1 To 4) As Boolean
+
+mat.read_range Sheet1.Range("A2:D5")
+mask(1) = True
+mask(2) = False
+mask(3) = True
+mask(4) = False
+
+Set filtered = mat.filter_rows(mask)
+Set picked = filtered.select_columns(Array(1, 4))</code></pre>
+          </article>
+          <article class="card">
+            <h3>列を追加して `Table` へ渡す</h3>
+            <pre class="code-block compact"><code>Dim mat As New Matrix
+Dim tbl As New Table
+
+mat.read_range Sheet1.Range("A2:C6")
+mat.append_column Array("OK", "NG", "OK", "OK", "NG")
+
+tbl.read_matrix mat, Array("date", "item", "amount", "status")</code></pre>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
