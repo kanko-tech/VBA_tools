@@ -66,7 +66,3 @@
 - `ExcelVBA/Vector`
 - `ExcelVBA/Matrix`
 - `ExcelVBA/Table`
-
-## Repository note
-
-This repository was renamed from `VBA` to `VBA_tools`.
