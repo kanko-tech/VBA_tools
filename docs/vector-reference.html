@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Vector Reference | VBA_tools</title>
+  <title>Vector | VBA_tools</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -13,11 +13,20 @@
 <body class="reference-page">
   <div class="page-shell docs-layout">
     <header class="hero detail-hero">
-      <p class="eyebrow">API Reference</p>
-      <h1>Vector Reference</h1>
+      <div class="position-strip" aria-label="Page position">
+        <a class="position-chip" href="index.html">Docs Home</a>
+        <span class="position-chip">ExcelVBA</span>
+        <span class="position-chip">Vector</span>
+        <span class="position-chip current">Reference</span>
+      </div>
+      <div class="hero-meta">
+        <p class="eyebrow">Technical Detail</p>
+        <h1>Vector</h1>
+        <p class="hero-subline">一次元データ操作モジュールの API 詳細</p>
+      </div>
       <p class="lead">
-        <code>Vector</code> のプロパティとメソッドを、役割ごとに整理した技術詳細ページです。
-        返り値、用途、注意点を確認しながら実装へ接続できます。
+        <code>Vector</code> の公開 API を、クラス図と用途付きの折りたたみ一覧で整理したページです。
+        どのメソッドが「読込」「条件判定」「変換」「集計」「出力」に属するかを追いながら確認できます。
       </p>
       <div class="detail-nav-stack">
         <div class="context-bar" aria-label="Context links">
@@ -39,73 +48,209 @@
 
     <div class="docs-columns">
       <main class="doc-main" id="doc-content">
-        <section class="panel" id="loading">
+        <section class="panel" id="diagram">
           <div class="section-heading">
-            <p class="eyebrow">Loading</p>
-            <h2>読込系</h2>
+            <p class="eyebrow">Class Diagram</p>
+            <h2>UML 風クラス図</h2>
           </div>
-          <div class="api-grid">
-            <article class="api-card">
-              <h3 id="read-col-range">read_col_range</h3>
-              <div class="api-signature">Sub read_col_range(ByVal rng As Range)</div>
-              <p>1 列の <code>Range</code> を読み込みます。縦方向の値をそのまま内部配列へ格納します。</p>
-              <div class="api-meta">
-                <div><strong>用途</strong> シート上の列データを <code>Vector</code> 化したいとき</div>
-                <div><strong>注意</strong> 複数列の範囲は想定外です</div>
-              </div>
-            </article>
-            <article class="api-card">
-              <h3 id="read-row-range">read_row_range</h3>
-              <div class="api-signature">Sub read_row_range(ByVal rng As Range)</div>
-              <p>1 行の <code>Range</code> を読み込みます。横方向の値を内部配列として保持します。</p>
-              <div class="api-meta">
-                <div><strong>用途</strong> 見出し行や横並びの設定値を扱うとき</div>
-                <div><strong>注意</strong> 複数行の範囲は対象外です</div>
-              </div>
-            </article>
-            <article class="api-card">
-              <h3 id="read-array">read_array</h3>
-              <div class="api-signature">Sub read_array(ByVal arr As Variant)</div>
-              <p>一次元配列をそのまま読み込みます。既存の配列処理から <code>Vector</code> に移したいときの入口です。</p>
-              <div class="api-meta">
-                <div><strong>用途</strong> VBA 内で作った配列をクラスメソッドで扱いたいとき</div>
-                <div><strong>注意</strong> 二次元配列は受け付けません</div>
-              </div>
-            </article>
+          <div class="reference-intro">
+            <div class="class-diagram">
+              <article class="class-box">
+                <span class="class-stereo">Class</span>
+                <p class="note-text"><strong>Vector</strong></p>
+                <ul class="member-list">
+                  <li>- mData As Variant</li>
+                  <li>- mIsLoaded As Boolean</li>
+                  <li>+ read_col_range(rng As Range)</li>
+                  <li>+ eq(matchValue) As Variant</li>
+                  <li>+ cast_to_double_safe(...)</li>
+                  <li>+ sum() As Double</li>
+                  <li>+ to_range_vertical(topLeft As Range)</li>
+                </ul>
+              </article>
+              <div class="class-rel">1 列または 1 行のデータを読み込み、条件判定・変換・集計・出力を一つのクラスで完結します。</div>
+            </div>
+            <div class="info-pills">
+              <div class="info-pill"><strong>主な責務</strong> 一次元配列の読込・整形・集計</div>
+              <div class="info-pill"><strong>主な入力</strong> Range / Variant 配列</div>
+              <div class="info-pill"><strong>主な出力</strong> Variant 配列 / Double / シート出力</div>
+            </div>
           </div>
         </section>
 
         <section class="panel" id="properties">
           <div class="section-heading">
             <p class="eyebrow">Properties</p>
-            <h2>参照系</h2>
+            <h2>プロパティと参照系</h2>
           </div>
-          <div class="api-grid">
-            <article class="api-card">
-              <h3 id="is-loaded">is_loaded</h3>
-              <div class="api-signature">Property Get is_loaded() As Boolean</div>
-              <p>値が読み込まれているかを返します。事前チェックやデバッグ向けです。</p>
-            </article>
-            <article class="api-card">
-              <h3 id="data">data</h3>
-              <div class="api-signature">Property Get data() As Variant</div>
-              <p>内部の一次元配列を返します。他モジュールや自前ロジックへ値を渡すときに使います。</p>
-            </article>
-            <article class="api-card">
-              <h3 id="count">count</h3>
-              <div class="api-signature">Property Get count() As Long</div>
-              <p>要素数を返します。ループや空チェックの基準になります。</p>
-            </article>
-            <article class="api-card">
-              <h3 id="item">item</h3>
-              <div class="api-signature">Function item(ByVal index As Long) As Variant</div>
-              <p>指定位置の値を返します。個別確認や条件分岐の補助に使えます。</p>
-            </article>
-            <article class="api-card">
-              <h3 id="type-names">type_names</h3>
-              <div class="api-signature">Property Get type_names() As Variant</div>
-              <p>各要素の <code>TypeName</code> を返します。データ品質の確認に向いています。</p>
-            </article>
+          <div class="api-directory">
+            <details class="api-entry">
+              <summary>
+                <span class="api-entry-main">
+                  <span class="api-kicker">Property</span>
+                  <span class="api-name-row"><strong>is_loaded</strong> <code>Property Get is_loaded() As Boolean</code></span>
+                </span>
+                <span class="api-summary-copy">読込済みかを返す</span>
+              </summary>
+              <div class="api-body">
+                <p>値が読み込まれているかだけを返す軽量な確認用プロパティです。</p>
+                <div class="table-wrap"><table class="api-spec-table"><tbody>
+                  <tr><th>入力</th><td>なし</td></tr>
+                  <tr><th>出力</th><td><code>Boolean</code></td></tr>
+                  <tr><th>前提</th><td>なし</td></tr>
+                  <tr><th>注意</th><td>データ本体の妥当性までは判定しません。</td></tr>
+                  <tr><th>ユースケース</th><td>初回読込前に処理を止めるガードを書く。</td></tr>
+                </tbody></table></div>
+              </div>
+            </details>
+
+            <details class="api-entry">
+              <summary>
+                <span class="api-entry-main">
+                  <span class="api-kicker">Property</span>
+                  <span class="api-name-row"><strong>data</strong> <code>Property Get data() As Variant</code></span>
+                </span>
+                <span class="api-summary-copy">内部の一次元配列を返す</span>
+              </summary>
+              <div class="api-body">
+                <p>内部データを複製して返します。外部の処理へ生の配列として渡したいときに使います。</p>
+                <div class="table-wrap"><table class="api-spec-table"><tbody>
+                  <tr><th>入力</th><td>なし</td></tr>
+                  <tr><th>出力</th><td><code>Variant</code> の一次元配列</td></tr>
+                  <tr><th>前提</th><td>事前に読込済みであること。</td></tr>
+                  <tr><th>注意</th><td>返されるのは複製なので、編集しても元データは変わりません。</td></tr>
+                  <tr><th>ユースケース</th><td>自前の VBA ループ処理へ配列をそのまま渡す。</td></tr>
+                </tbody></table></div>
+              </div>
+            </details>
+
+            <details class="api-entry">
+              <summary>
+                <span class="api-entry-main">
+                  <span class="api-kicker">Property</span>
+                  <span class="api-name-row"><strong>count</strong> <code>Property Get count() As Long</code></span>
+                </span>
+                <span class="api-summary-copy">要素数を返す</span>
+              </summary>
+              <div class="api-body">
+                <p>保持している要素数を返します。ループや空判定の基準になります。</p>
+                <div class="table-wrap"><table class="api-spec-table"><tbody>
+                  <tr><th>入力</th><td>なし</td></tr>
+                  <tr><th>出力</th><td><code>Long</code></td></tr>
+                  <tr><th>前提</th><td>事前に読込済みであること。</td></tr>
+                  <tr><th>注意</th><td>1 始まり配列かどうかに関わらず件数だけを返します。</td></tr>
+                  <tr><th>ユースケース</th><td>結果列を書き出す前に長さを確認する。</td></tr>
+                </tbody></table></div>
+              </div>
+            </details>
+
+            <details class="api-entry">
+              <summary>
+                <span class="api-entry-main">
+                  <span class="api-kicker">Property</span>
+                  <span class="api-name-row"><strong>item</strong> <code>Property Get item(ByVal index As Long) As Variant</code></span>
+                </span>
+                <span class="api-summary-copy">指定位置の値を返す</span>
+              </summary>
+              <div class="api-body">
+                <p>インデックスを指定して個別の値を参照します。</p>
+                <div class="table-wrap"><table class="api-spec-table"><tbody>
+                  <tr><th>入力</th><td><code>index As Long</code></td></tr>
+                  <tr><th>出力</th><td>指定位置の値</td></tr>
+                  <tr><th>前提</th><td>読込済みで、<code>index</code> が配列範囲内であること。</td></tr>
+                  <tr><th>注意</th><td>範囲外なら例外になります。</td></tr>
+                  <tr><th>ユースケース</th><td>先頭値や特定行の値だけを確認したいとき。</td></tr>
+                </tbody></table></div>
+              </div>
+            </details>
+
+            <details class="api-entry">
+              <summary>
+                <span class="api-entry-main">
+                  <span class="api-kicker">Method</span>
+                  <span class="api-name-row"><strong>type_names</strong> <code>Function type_names() As Variant</code></span>
+                </span>
+                <span class="api-summary-copy">各要素の型名を返す</span>
+              </summary>
+              <div class="api-body">
+                <p>各要素を <code>TypeName</code> 相当の文字列配列にして返し、データ品質の確認に使えます。</p>
+                <div class="table-wrap"><table class="api-spec-table"><tbody>
+                  <tr><th>入力</th><td>なし</td></tr>
+                  <tr><th>出力</th><td>型名を並べた一次元配列</td></tr>
+                  <tr><th>前提</th><td>事前に読込済みであること。</td></tr>
+                  <tr><th>注意</th><td><code>Error</code> と <code>Empty</code> は特別扱いされます。</td></tr>
+                  <tr><th>ユースケース</th><td>数値列のつもりが文字列混在になっていないか確認する。</td></tr>
+                </tbody></table></div>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <section class="panel" id="loading">
+          <div class="section-heading">
+            <p class="eyebrow">Loading</p>
+            <h2>読込系</h2>
+          </div>
+          <div class="api-directory">
+            <details class="api-entry">
+              <summary>
+                <span class="api-entry-main">
+                  <span class="api-kicker">Method</span>
+                  <span class="api-name-row"><strong>read_col_range</strong> <code>Sub read_col_range(ByVal rng As Range)</code></span>
+                </span>
+                <span class="api-summary-copy">1 列の Range を読む</span>
+              </summary>
+              <div class="api-body">
+                <p>縦方向の 1 列範囲を読み込み、一次元配列として保持します。</p>
+                <div class="table-wrap"><table class="api-spec-table"><tbody>
+                  <tr><th>入力</th><td><code>rng As Range</code></td></tr>
+                  <tr><th>出力</th><td>なし。内部状態を更新。</td></tr>
+                  <tr><th>前提</th><td><code>rng</code> が <code>Nothing</code> ではなく 1 列であること。</td></tr>
+                  <tr><th>注意</th><td>複数列を渡すと例外になります。</td></tr>
+                  <tr><th>ユースケース</th><td>シートの金額列だけを集計前に読み込む。</td></tr>
+                </tbody></table></div>
+              </div>
+            </details>
+
+            <details class="api-entry">
+              <summary>
+                <span class="api-entry-main">
+                  <span class="api-kicker">Method</span>
+                  <span class="api-name-row"><strong>read_row_range</strong> <code>Sub read_row_range(ByVal rng As Range)</code></span>
+                </span>
+                <span class="api-summary-copy">1 行の Range を読む</span>
+              </summary>
+              <div class="api-body">
+                <p>横方向の 1 行範囲を読み込みます。見出し行や横並びの設定値向けです。</p>
+                <div class="table-wrap"><table class="api-spec-table"><tbody>
+                  <tr><th>入力</th><td><code>rng As Range</code></td></tr>
+                  <tr><th>出力</th><td>なし。内部状態を更新。</td></tr>
+                  <tr><th>前提</th><td><code>rng</code> が 1 行であること。</td></tr>
+                  <tr><th>注意</th><td>複数行は受け付けません。</td></tr>
+                  <tr><th>ユースケース</th><td>見出し行を読み込んで列順を調べる。</td></tr>
+                </tbody></table></div>
+              </div>
+            </details>
+
+            <details class="api-entry">
+              <summary>
+                <span class="api-entry-main">
+                  <span class="api-kicker">Method</span>
+                  <span class="api-name-row"><strong>read_array</strong> <code>Sub read_array(ByVal arr As Variant)</code></span>
+                </span>
+                <span class="api-summary-copy">一次元配列を読む</span>
+              </summary>
+              <div class="api-body">
+                <p>既存の配列ロジックから <code>Vector</code> に載せ替える入口です。</p>
+                <div class="table-wrap"><table class="api-spec-table"><tbody>
+                  <tr><th>入力</th><td><code>arr As Variant</code> の一次元配列</td></tr>
+                  <tr><th>出力</th><td>なし。内部状態を更新。</td></tr>
+                  <tr><th>前提</th><td><code>arr</code> が一次元配列であること。</td></tr>
+                  <tr><th>注意</th><td>二次元配列は例外になります。</td></tr>
+                  <tr><th>ユースケース</th><td>他処理で作った配列に対して <code>eq</code> や <code>sum</code> を使う。</td></tr>
+                </tbody></table></div>
+              </div>
+            </details>
           </div>
         </section>
 
@@ -114,34 +259,14 @@
             <p class="eyebrow">Conditions</p>
             <h2>条件マスク系</h2>
           </div>
-          <div class="api-grid">
-            <article class="api-card">
-              <h3 id="eq">eq</h3>
-              <div class="api-signature">Function eq(ByVal matchValue As Variant) As Variant</div>
-              <p>一致判定のブール配列を返します。最も基本的な絞り込み条件です。</p>
-            </article>
-            <article class="api-card">
-              <h3 id="ne">ne</h3>
-              <div class="api-signature">Function ne(ByVal matchValue As Variant) As Variant</div>
-              <p>不一致判定のブール配列を返します。</p>
-            </article>
-            <article class="api-card">
-              <h3 id="gt-ge">gt / ge</h3>
-              <div class="api-signature">Function gt(ByVal threshold As Variant) As Variant</div>
-              <div class="api-signature">Function ge(ByVal threshold As Variant) As Variant</div>
-              <p>しきい値より大きい、または以上の条件を作ります。数値列の判定によく使います。</p>
-            </article>
-            <article class="api-card">
-              <h3 id="lt-le">lt / le</h3>
-              <div class="api-signature">Function lt(ByVal threshold As Variant) As Variant</div>
-              <div class="api-signature">Function le(ByVal threshold As Variant) As Variant</div>
-              <p>しきい値より小さい、または以下の条件を作ります。</p>
-            </article>
-            <article class="api-card">
-              <h3 id="is-empty">is_empty</h3>
-              <div class="api-signature">Function is_empty(Optional ByVal treatBlankStringAsEmpty As Boolean = True) As Variant</div>
-              <p>空欄判定のブール配列を返します。空文字を空欄扱いするかも指定できます。</p>
-            </article>
+          <div class="api-directory">
+            <details class="api-entry"><summary><span class="api-entry-main"><span class="api-kicker">Method</span><span class="api-name-row"><strong>eq</strong> <code>Function eq(ByVal matchValue As Variant) As Variant</code></span></span><span class="api-summary-copy">一致判定のマスク</span></summary><div class="api-body"><p>各要素が指定値と一致するかをブール配列で返します。</p><div class="table-wrap"><table class="api-spec-table"><tbody><tr><th>入力</th><td><code>matchValue</code></td></tr><tr><th>出力</th><td><code>Boolean</code> の一次元配列</td></tr><tr><th>前提</th><td>読込済みであること。</td></tr><tr><th>注意</th><td><code>Error</code> や <code>Null</code> は一致しません。</td></tr><tr><th>ユースケース</th><td>特定コードに一致する行だけを別処理へ渡す。</td></tr></tbody></table></div></div></details>
+            <details class="api-entry"><summary><span class="api-entry-main"><span class="api-kicker">Method</span><span class="api-name-row"><strong>ne</strong> <code>Function ne(ByVal matchValue As Variant) As Variant</code></span></span><span class="api-summary-copy">不一致判定のマスク</span></summary><div class="api-body"><p>指定値と一致しない要素を <code>True</code> にしたマスクです。</p><div class="table-wrap"><table class="api-spec-table"><tbody><tr><th>入力</th><td><code>matchValue</code></td></tr><tr><th>出力</th><td><code>Boolean</code> の一次元配列</td></tr><tr><th>前提</th><td>読込済みであること。</td></tr><tr><th>注意</th><td>比較不能な値は <code>False</code> 扱いです。</td></tr><tr><th>ユースケース</th><td>空欄以外、特定区分以外を抽出したいとき。</td></tr></tbody></table></div></div></details>
+            <details class="api-entry"><summary><span class="api-entry-main"><span class="api-kicker">Method</span><span class="api-name-row"><strong>gt</strong> <code>Function gt(ByVal threshold As Variant) As Variant</code></span></span><span class="api-summary-copy">より大きい条件</span></summary><div class="api-body"><p>しきい値より大きい要素に対するマスクを返します。</p><div class="table-wrap"><table class="api-spec-table"><tbody><tr><th>入力</th><td><code>threshold</code></td></tr><tr><th>出力</th><td><code>Boolean</code> の一次元配列</td></tr><tr><th>前提</th><td>比較可能な値が入っていること。</td></tr><tr><th>注意</th><td>文字列など比較失敗時は <code>False</code> になります。</td></tr><tr><th>ユースケース</th><td>売上が一定額を超えるデータだけ拾う。</td></tr></tbody></table></div></div></details>
+            <details class="api-entry"><summary><span class="api-entry-main"><span class="api-kicker">Method</span><span class="api-name-row"><strong>ge</strong> <code>Function ge(ByVal threshold As Variant) As Variant</code></span></span><span class="api-summary-copy">以上条件のマスク</span></summary><div class="api-body"><p>しきい値以上の要素に対するマスクです。</p><div class="table-wrap"><table class="api-spec-table"><tbody><tr><th>入力</th><td><code>threshold</code></td></tr><tr><th>出力</th><td><code>Boolean</code> の一次元配列</td></tr><tr><th>前提</th><td>読込済みであること。</td></tr><tr><th>注意</th><td>比較失敗時は <code>False</code> です。</td></tr><tr><th>ユースケース</th><td>締切日以降のデータをまとめる。</td></tr></tbody></table></div></div></details>
+            <details class="api-entry"><summary><span class="api-entry-main"><span class="api-kicker">Method</span><span class="api-name-row"><strong>lt</strong> <code>Function lt(ByVal threshold As Variant) As Variant</code></span></span><span class="api-summary-copy">より小さい条件</span></summary><div class="api-body"><p>しきい値より小さい要素を判定します。</p><div class="table-wrap"><table class="api-spec-table"><tbody><tr><th>入力</th><td><code>threshold</code></td></tr><tr><th>出力</th><td><code>Boolean</code> の一次元配列</td></tr><tr><th>前提</th><td>比較可能な値が入っていること。</td></tr><tr><th>注意</th><td>数値列向けの利用が安全です。</td></tr><tr><th>ユースケース</th><td>閾値未満のデータを異常値候補として拾う。</td></tr></tbody></table></div></div></details>
+            <details class="api-entry"><summary><span class="api-entry-main"><span class="api-kicker">Method</span><span class="api-name-row"><strong>le</strong> <code>Function le(ByVal threshold As Variant) As Variant</code></span></span><span class="api-summary-copy">以下条件のマスク</span></summary><div class="api-body"><p>しきい値以下の要素を判定します。</p><div class="table-wrap"><table class="api-spec-table"><tbody><tr><th>入力</th><td><code>threshold</code></td></tr><tr><th>出力</th><td><code>Boolean</code> の一次元配列</td></tr><tr><th>前提</th><td>読込済みであること。</td></tr><tr><th>注意</th><td><code>Null</code> や <code>Error</code> は対象外です。</td></tr><tr><th>ユースケース</th><td>期日以前の行を抜き出す条件を作る。</td></tr></tbody></table></div></div></details>
+            <details class="api-entry"><summary><span class="api-entry-main"><span class="api-kicker">Method</span><span class="api-name-row"><strong>is_empty</strong> <code>Function is_empty(Optional ByVal treatBlankStringAsEmpty As Boolean = True) As Variant</code></span></span><span class="api-summary-copy">空欄判定のマスク</span></summary><div class="api-body"><p><code>Empty</code> と、必要なら空文字も空欄として判定します。</p><div class="table-wrap"><table class="api-spec-table"><tbody><tr><th>入力</th><td><code>treatBlankStringAsEmpty As Boolean</code></td></tr><tr><th>出力</th><td><code>Boolean</code> の一次元配列</td></tr><tr><th>前提</th><td>読込済みであること。</td></tr><tr><th>注意</th><td>空文字を空欄扱いしない設定にもできます。</td></tr><tr><th>ユースケース</th><td>未入力セルの補完対象を一括で見つける。</td></tr></tbody></table></div></div></details>
           </div>
         </section>
 
@@ -150,32 +275,12 @@
             <p class="eyebrow">Transform</p>
             <h2>変換・更新系</h2>
           </div>
-          <div class="api-grid">
-            <article class="api-card">
-              <h3 id="cast-double">cast_to_double_safe</h3>
-              <div class="api-signature">Sub cast_to_double_safe(Optional emptyAsZero As Boolean = False, Optional invalidAsZero As Boolean = False, Optional treatDateAsInvalid As Boolean = True)</div>
-              <p>値を安全に <code>Double</code> へ変換します。空欄や変換失敗時の扱いも指定できます。</p>
-            </article>
-            <article class="api-card">
-              <h3 id="cast-string">cast_to_string_safe</h3>
-              <div class="api-signature">Sub cast_to_string_safe(Optional emptyAsBlank As Boolean = True, Optional errorAsBlank As Boolean = True)</div>
-              <p>値を文字列へ揃えます。表示用や比較前の正規化に向いています。</p>
-            </article>
-            <article class="api-card">
-              <h3 id="cast-date">cast_to_date_safe</h3>
-              <div class="api-signature">Sub cast_to_date_safe(Optional ByVal invalidAsEmpty As Boolean = True)</div>
-              <p>日付として解釈できる値を <code>Date</code> に変換します。</p>
-            </article>
-            <article class="api-card">
-              <h3 id="fill-empty">fill_empty</h3>
-              <div class="api-signature">Sub fill_empty(ByVal fillValue As Variant, Optional ByVal treatBlankStringAsEmpty As Boolean = True)</div>
-              <p>空欄や空文字を指定値で埋めます。数値化や集計の前処理として使いやすいです。</p>
-            </article>
-            <article class="api-card">
-              <h3 id="map">map</h3>
-              <div class="api-signature">Sub map(ByVal functionName As String)</div>
-              <p>各要素へ同じ関数を適用して値を更新します。ルールベースの変換を共通化したいときに向いています。</p>
-            </article>
+          <div class="api-directory">
+            <details class="api-entry"><summary><span class="api-entry-main"><span class="api-kicker">Method</span><span class="api-name-row"><strong>cast_to_double_safe</strong> <code>Sub cast_to_double_safe(Optional ByVal emptyAsZero As Boolean = False, Optional ByVal invalidAsZero As Boolean = False, Optional ByVal treatDateAsInvalid As Boolean = True)</code></span></span><span class="api-summary-copy">安全に Double へ変換</span></summary><div class="api-body"><p>空欄や不正値の扱いを指定しながら、要素を <code>Double</code> 中心へそろえます。</p><div class="table-wrap"><table class="api-spec-table"><tbody><tr><th>入力</th><td>空欄・不正値・日付値の扱いを指定する 3 つのオプション</td></tr><tr><th>出力</th><td>なし。内部状態を更新。</td></tr><tr><th>前提</th><td>読込済みであること。</td></tr><tr><th>注意</th><td>日付も数値化したい場合は <code>treatDateAsInvalid:=False</code> を検討します。</td></tr><tr><th>ユースケース</th><td>CSV 由来の数値列を集計前に正規化する。</td></tr></tbody></table></div></div></details>
+            <details class="api-entry"><summary><span class="api-entry-main"><span class="api-kicker">Method</span><span class="api-name-row"><strong>cast_to_string_safe</strong> <code>Sub cast_to_string_safe(Optional ByVal emptyAsBlank As Boolean = True, Optional ByVal errorAsBlank As Boolean = True)</code></span></span><span class="api-summary-copy">安全に文字列へ変換</span></summary><div class="api-body"><p>空欄やエラー値の扱いを指定しながら文字列へそろえます。</p><div class="table-wrap"><table class="api-spec-table"><tbody><tr><th>入力</th><td><code>emptyAsBlank</code>, <code>errorAsBlank</code></td></tr><tr><th>出力</th><td>なし。内部状態を更新。</td></tr><tr><th>前提</th><td>読込済みであること。</td></tr><tr><th>注意</th><td><code>errorAsBlank:=False</code> にするとエラー値混在時に例外になります。</td></tr><tr><th>ユースケース</th><td>比較前に全要素を文字列化して表記揺れを吸収する。</td></tr></tbody></table></div></div></details>
+            <details class="api-entry"><summary><span class="api-entry-main"><span class="api-kicker">Method</span><span class="api-name-row"><strong>cast_to_date_safe</strong> <code>Sub cast_to_date_safe(Optional ByVal invalidAsEmpty As Boolean = True)</code></span></span><span class="api-summary-copy">安全に Date へ変換</span></summary><div class="api-body"><p>日付解釈できる値だけを <code>Date</code> に変換します。</p><div class="table-wrap"><table class="api-spec-table"><tbody><tr><th>入力</th><td><code>invalidAsEmpty As Boolean</code></td></tr><tr><th>出力</th><td>なし。内部状態を更新。</td></tr><tr><th>前提</th><td>読込済みであること。</td></tr><tr><th>注意</th><td>変換できない値を残したい場合はこのメソッドだけでは対応しません。</td></tr><tr><th>ユースケース</th><td>日付列の比較前に型をそろえる。</td></tr></tbody></table></div></div></details>
+            <details class="api-entry"><summary><span class="api-entry-main"><span class="api-kicker">Method</span><span class="api-name-row"><strong>fill_empty</strong> <code>Sub fill_empty(ByVal fillValue As Variant, Optional ByVal treatBlankStringAsEmpty As Boolean = True)</code></span></span><span class="api-summary-copy">空欄を埋める</span></summary><div class="api-body"><p>空欄や空文字を指定値で埋めます。</p><div class="table-wrap"><table class="api-spec-table"><tbody><tr><th>入力</th><td><code>fillValue</code>, <code>treatBlankStringAsEmpty</code></td></tr><tr><th>出力</th><td>なし。内部状態を更新。</td></tr><tr><th>前提</th><td>読込済みであること。</td></tr><tr><th>注意</th><td>空欄判定の基準はオプションで変わります。</td></tr><tr><th>ユースケース</th><td>未入力の数値欄を 0 で埋めてから集計する。</td></tr></tbody></table></div></div></details>
+            <details class="api-entry"><summary><span class="api-entry-main"><span class="api-kicker">Method</span><span class="api-name-row"><strong>map</strong> <code>Sub map(ByVal functionName As String)</code></span></span><span class="api-summary-copy">各要素へ関数を適用</span></summary><div class="api-body"><p><code>Application.Run</code> で各要素に同じ関数を適用し、値を更新します。</p><div class="table-wrap"><table class="api-spec-table"><tbody><tr><th>入力</th><td><code>functionName As String</code></td></tr><tr><th>出力</th><td>なし。内部状態を更新。</td></tr><tr><th>前提</th><td>対象関数が引数 <code>(value, index)</code> を受け取れること。</td></tr><tr><th>注意</th><td>関数が見つからない、または実行失敗すると例外になります。</td></tr><tr><th>ユースケース</th><td>各値へ一律の丸めや文字列整形をかける。</td></tr></tbody></table></div></div></details>
           </div>
         </section>
 
@@ -184,22 +289,10 @@
             <p class="eyebrow">Aggregate</p>
             <h2>集計系</h2>
           </div>
-          <div class="api-grid">
-            <article class="api-card">
-              <h3 id="unique">unique</h3>
-              <div class="api-signature">Function unique() As Variant</div>
-              <p>重複を除いた値の配列を返します。カテゴリ一覧の作成などに使えます。</p>
-            </article>
-            <article class="api-card">
-              <h3 id="sum">sum</h3>
-              <div class="api-signature">Function sum() As Double</div>
-              <p>数値要素の合計を返します。事前に <code>cast_to_double_safe</code> を通すと安定します。</p>
-            </article>
-            <article class="api-card">
-              <h3 id="mean">mean</h3>
-              <div class="api-signature">Function mean() As Double</div>
-              <p>数値要素の平均を返します。集計結果の確認用に使いやすいメソッドです。</p>
-            </article>
+          <div class="api-directory">
+            <details class="api-entry"><summary><span class="api-entry-main"><span class="api-kicker">Method</span><span class="api-name-row"><strong>unique</strong> <code>Function unique() As Variant</code></span></span><span class="api-summary-copy">重複を除いた値を返す</span></summary><div class="api-body"><p>順序を保ったまま重複を除外した一次元配列を返します。</p><div class="table-wrap"><table class="api-spec-table"><tbody><tr><th>入力</th><td>なし</td></tr><tr><th>出力</th><td>重複なしの一次元配列</td></tr><tr><th>前提</th><td>読込済みであること。</td></tr><tr><th>注意</th><td>比較キーは内部で文字列化されます。</td></tr><tr><th>ユースケース</th><td>カテゴリ一覧や候補リストを作る。</td></tr></tbody></table></div></div></details>
+            <details class="api-entry"><summary><span class="api-entry-main"><span class="api-kicker">Method</span><span class="api-name-row"><strong>sum</strong> <code>Function sum() As Double</code></span></span><span class="api-summary-copy">合計を返す</span></summary><div class="api-body"><p>数値要素の合計を返します。</p><div class="table-wrap"><table class="api-spec-table"><tbody><tr><th>入力</th><td>なし</td></tr><tr><th>出力</th><td><code>Double</code></td></tr><tr><th>前提</th><td>全要素が厳密に数値型であること。</td></tr><tr><th>注意</th><td>文字列の数値はそのままでは集計できません。必要なら先に変換します。</td></tr><tr><th>ユースケース</th><td>金額列の総計を求める。</td></tr></tbody></table></div></div></details>
+            <details class="api-entry"><summary><span class="api-entry-main"><span class="api-kicker">Method</span><span class="api-name-row"><strong>mean</strong> <code>Function mean() As Double</code></span></span><span class="api-summary-copy">平均を返す</span></summary><div class="api-body"><p><code>sum / count</code> に基づいて平均値を返します。</p><div class="table-wrap"><table class="api-spec-table"><tbody><tr><th>入力</th><td>なし</td></tr><tr><th>出力</th><td><code>Double</code></td></tr><tr><th>前提</th><td>全要素が数値型であり、件数が 0 でないこと。</td></tr><tr><th>注意</th><td>空欄混在のままでは想定外になりやすいです。</td></tr><tr><th>ユースケース</th><td>評価点列の平均を確認する。</td></tr></tbody></table></div></div></details>
           </div>
         </section>
 
@@ -208,17 +301,9 @@
             <p class="eyebrow">Output</p>
             <h2>出力系</h2>
           </div>
-          <div class="api-grid">
-            <article class="api-card">
-              <h3 id="to-range-vertical">to_range_vertical</h3>
-              <div class="api-signature">Sub to_range_vertical(ByVal topLeft As Range)</div>
-              <p>値を縦方向へ書き出します。列として結果を確認したいときに向いています。</p>
-            </article>
-            <article class="api-card">
-              <h3 id="to-range-horizontal">to_range_horizontal</h3>
-              <div class="api-signature">Sub to_range_horizontal(ByVal topLeft As Range)</div>
-              <p>値を横方向へ書き出します。見出し行や簡易確認用の出力に向いています。</p>
-            </article>
+          <div class="api-directory">
+            <details class="api-entry"><summary><span class="api-entry-main"><span class="api-kicker">Method</span><span class="api-name-row"><strong>to_range_vertical</strong> <code>Sub to_range_vertical(ByVal topLeft As Range)</code></span></span><span class="api-summary-copy">縦方向へ書き出す</span></summary><div class="api-body"><p>ベクトルを 1 列としてシートへ出力します。</p><div class="table-wrap"><table class="api-spec-table"><tbody><tr><th>入力</th><td><code>topLeft As Range</code></td></tr><tr><th>出力</th><td>なし。シートへ書込。</td></tr><tr><th>前提</th><td>読込済みで、<code>topLeft</code> が <code>Nothing</code> ではないこと。</td></tr><tr><th>注意</th><td>既存セルの内容は上書きされます。</td></tr><tr><th>ユースケース</th><td>抽出済みのコード一覧を別列へ出力する。</td></tr></tbody></table></div></div></details>
+            <details class="api-entry"><summary><span class="api-entry-main"><span class="api-kicker">Method</span><span class="api-name-row"><strong>to_range_horizontal</strong> <code>Sub to_range_horizontal(ByVal topLeft As Range)</code></span></span><span class="api-summary-copy">横方向へ書き出す</span></summary><div class="api-body"><p>ベクトルを 1 行としてシートへ出力します。</p><div class="table-wrap"><table class="api-spec-table"><tbody><tr><th>入力</th><td><code>topLeft As Range</code></td></tr><tr><th>出力</th><td>なし。シートへ書込。</td></tr><tr><th>前提</th><td>読込済みであること。</td></tr><tr><th>注意</th><td>横に広がるため、既存の見出し行と衝突しない位置を選びます。</td></tr><tr><th>ユースケース</th><td>ユニーク値一覧を見出し行のように並べる。</td></tr></tbody></table></div></div></details>
           </div>
         </section>
 
@@ -227,12 +312,26 @@
             <p class="eyebrow">State</p>
             <h2>状態管理系</h2>
           </div>
-          <div class="api-grid">
-            <article class="api-card">
-              <h3 id="clear">clear</h3>
-              <div class="api-signature">Sub clear()</div>
-              <p>内部状態を初期化します。同じインスタンスを再利用したいときのリセット用です。</p>
-            </article>
+          <div class="api-directory">
+            <details class="api-entry">
+              <summary>
+                <span class="api-entry-main">
+                  <span class="api-kicker">Method</span>
+                  <span class="api-name-row"><strong>clear</strong> <code>Sub clear()</code></span>
+                </span>
+                <span class="api-summary-copy">内部状態を初期化する</span>
+              </summary>
+              <div class="api-body">
+                <p>同じインスタンスを再利用したいときに、中身を未読込状態へ戻します。</p>
+                <div class="table-wrap"><table class="api-spec-table"><tbody>
+                  <tr><th>入力</th><td>なし</td></tr>
+                  <tr><th>出力</th><td>なし。内部状態を初期化。</td></tr>
+                  <tr><th>前提</th><td>なし</td></tr>
+                  <tr><th>注意</th><td>保持していた値は失われます。</td></tr>
+                  <tr><th>ユースケース</th><td>ループの中で同じ変数を使い回す前に状態を消す。</td></tr>
+                </tbody></table></div>
+              </div>
+            </details>
           </div>
         </section>
       </main>
@@ -244,7 +343,7 @@
           <nav data-toc-source="#doc-content"></nav>
           <div class="doc-note">
             <h3>関連ページ</h3>
-            <p>導入と利用場面の整理は Guide ページにあります。</p>
+            <p>導入と利用場面の整理は Guide ページで確認できます。</p>
             <div class="tab-switch">
               <a href="vector.html">Vector Guide</a>
             </div>

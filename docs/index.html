@@ -12,38 +12,51 @@
 <body>
   <div class="page-shell">
     <header class="hero">
-      <p class="eyebrow">GitHub Pages</p>
-      <h1>VBA_tools</h1>
+      <div class="position-strip" aria-label="Page position">
+        <span class="position-chip">kanko-tech</span>
+        <span class="position-chip">VBA_tools</span>
+        <span class="position-chip current">Docs Home</span>
+      </div>
+      <div class="hero-meta">
+        <p class="eyebrow">Documentation Portal</p>
+        <h1>VBA_tools</h1>
+        <p class="hero-subline">ExcelVBA モジュール群の入口ページ</p>
+      </div>
       <p class="lead">
-        Excel VBA で再利用しやすいクラスモジュールを、概要と技術詳細に分けて読めるドキュメントサイトです。
-        各モジュールは「Guide」と「Reference」の 2 ページ構成に分かれています。
+        Excel VBA で再利用しやすいクラスモジュールを、概要を読む <strong>Guide</strong> と、
+        技術詳細を確認する <strong>Reference</strong> に分けて整理したドキュメントサイトです。
       </p>
+      <div class="site-pill-row">
+        <span class="site-pill">Home は全体の地図</span>
+        <span class="site-pill">Guide は導入と使いどころ</span>
+        <span class="site-pill">Reference は API 詳細</span>
+      </div>
       <div class="hero-actions">
         <a href="https://github.com/kanko-tech/VBA_tools" target="_blank" rel="noreferrer">Repository</a>
         <a href="https://github.com/kanko-tech/VBA_tools/tree/main/src/ExcelVBA" target="_blank" rel="noreferrer">Source Directory</a>
       </div>
-      <nav class="page-nav" aria-label="Page navigation">
+      <nav class="page-nav" aria-label="Main navigation">
         <a href="index.html" class="current">Overview</a>
-        <a href="vector.html">Vector Guide</a>
-        <a href="matrix.html">Matrix Guide</a>
-        <a href="datatable.html">DataTable Guide</a>
+        <a href="vector.html">Vector</a>
+        <a href="matrix.html">Matrix</a>
+        <a href="datatable.html">DataTable</a>
       </nav>
     </header>
 
     <main class="doc-main">
       <section class="panel">
         <div class="section-heading">
-          <p class="eyebrow">Structure</p>
-          <h2>ドキュメントの見方</h2>
+          <p class="eyebrow">How To Read</p>
+          <h2>ページの役割</h2>
         </div>
         <div class="grid two">
           <article class="module-card">
             <h3>Guide</h3>
-            <p>README の内容を拡張したページです。用途、向いている場面、導入方法、最小例を整理してあります。</p>
+            <p>README を拡張した案内ページです。用途、向いている場面、導入方法、最小例を先に把握できます。</p>
           </article>
           <article class="module-card">
             <h3>Reference</h3>
-            <p>プロパティとメソッドの全解説ページです。シグネチャ、役割、注意点を確認しながら実装できます。</p>
+            <p>プロパティとメソッドの技術詳細です。クラス図、前提条件、注意点、ユースケースを見ながら実装できます。</p>
           </article>
         </div>
       </section>
@@ -56,7 +69,7 @@
         <div class="grid three">
           <article class="module-card">
             <h3>Vector</h3>
-            <p>1 列または 1 行の値を読み込み、条件マスク、型変換、集計に使うクラスです。</p>
+            <p>一次元データを読み込み、条件マスク、型変換、集計、出力までを扱うクラスです。</p>
             <div class="tab-switch">
               <a href="vector.html">Guide</a>
               <a href="vector-reference.html">Reference</a>
@@ -64,7 +77,7 @@
           </article>
           <article class="module-card">
             <h3>Matrix</h3>
-            <p>列名を持たない表データを 2 次元配列として扱うための基本クラスです。</p>
+            <p>列名を持たない表データを、二次元配列として組み替えたり抽出したりするための基盤クラスです。</p>
             <div class="tab-switch">
               <a href="matrix.html">Guide</a>
               <a href="matrix-reference.html">Reference</a>
@@ -72,7 +85,7 @@
           </article>
           <article class="module-card">
             <h3>DataTable</h3>
-            <p>ヘッダー付きの表データを列名ベースで扱うためのクラスです。</p>
+            <p>ヘッダー付き表データを列名ベースで扱い、実務寄りの抽出や更新を読みやすく書くためのクラスです。</p>
             <div class="tab-switch">
               <a href="datatable.html">Guide</a>
               <a href="datatable-reference.html">Reference</a>
@@ -88,41 +101,41 @@
         </div>
         <div class="grid three">
           <article class="doc-note">
-            <h3>Vector を選ぶ場面</h3>
-            <p>列や行の値だけをまとめて扱いたいとき。条件判定や集計を独立した部品として使いたいとき。</p>
+            <h3>Vector を選ぶ</h3>
+            <p>列や行の値だけをまとめて扱い、条件判定や集計を独立した部品として使いたいときに向いています。</p>
           </article>
           <article class="doc-note">
-            <h3>Matrix を選ぶ場面</h3>
-            <p>列名は不要で、表全体を配列として組み替えたいとき。中間処理の土台に向いています。</p>
+            <h3>Matrix を選ぶ</h3>
+            <p>列名を使わず、表全体を配列として切り出したり並べ替えたりする中間処理の土台に向いています。</p>
           </article>
           <article class="doc-note">
-            <h3>DataTable を選ぶ場面</h3>
-            <p>列名を基準に抽出や更新を書きたいとき。実務データを読みやすく保守したいときに向いています。</p>
+            <h3>DataTable を選ぶ</h3>
+            <p>列名を基準に抽出や更新を書きたいときや、セル番地依存のコードを減らしたいときに向いています。</p>
           </article>
         </div>
       </section>
 
       <section class="panel">
         <div class="section-heading">
-          <p class="eyebrow">Quick Start</p>
-          <h2>導入の流れ</h2>
+          <p class="eyebrow">Flow</p>
+          <h2>読み進め方</h2>
         </div>
         <div class="step-grid">
           <article class="step-card">
-            <h3>1. Overview を確認</h3>
-            <p>どのモジュールを使うべきかを先に確認します。</p>
+            <h3>1. Home で選ぶ</h3>
+            <p>まずどのモジュールを使うかを決めます。</p>
           </article>
           <article class="step-card">
-            <h3>2. Guide を読む</h3>
-            <p>用途、導入方法、最小例を確認して、使い始め方をつかみます。</p>
+            <h3>2. Guide でつかむ</h3>
+            <p>用途、導入方法、最小例を見て、使い始め方を把握します。</p>
           </article>
           <article class="step-card">
-            <h3>3. Reference を参照</h3>
-            <p>実装時に必要なプロパティやメソッドを詳細ページで確認します。</p>
+            <h3>3. Reference で詰める</h3>
+            <p>API の詳細、前提条件、注意事項、ユースケースを確認します。</p>
           </article>
           <article class="step-card">
-            <h3>4. README とソースも確認</h3>
-            <p>実装寄りの補足は各 README とクラス本体をあわせて見ます。</p>
+            <h3>4. README とソースで補う</h3>
+            <p>実装に近い補足や内部動作は README とクラス本体をあわせて確認します。</p>
           </article>
         </div>
       </section>
@@ -139,7 +152,7 @@
           </a>
           <a class="link-tile" href="https://github.com/kanko-tech/VBA_tools/blob/main/src/ExcelVBA/README.md" target="_blank" rel="noreferrer">
             <span>ExcelVBA README</span>
-            <small>モジュール一覧の概要</small>
+            <small>ExcelVBA 配下の概要</small>
           </a>
           <a class="link-tile" href="https://github.com/kanko-tech/VBA_tools/tree/main/src/ExcelVBA" target="_blank" rel="noreferrer">
             <span>Source Directory</span>
