@@ -3,63 +3,118 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Vector | VBA_tools</title>
+  <title>Vector Guide | VBA_tools</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
   <script src="page.js" defer></script>
 </head>
 <body>
-  <div class="page-shell">
+  <div class="page-shell docs-layout">
     <header class="hero detail-hero">
       <p class="eyebrow">Module Guide</p>
       <h1>Vector</h1>
       <p class="lead">
-        単一列または単一行のデータを、比較・整形・集計しやすい形で扱うためのクラスです。
-        条件マスク生成や数値列の前処理をまとめたいときに向いています。
+        <code>Vector</code> は 1 列または 1 行の値を、まとめて読み込み、条件マスク作成や型変換、集計に使うためのクラスです。
+        Excel の列データを VBA で扱う処理を、セル単位の繰り返しより短く明確に書けます。
       </p>
       <div class="hero-actions">
-        <a href="index.html">Back to Docs</a>
+        <a href="vector-reference.html">API Reference</a>
         <a href="https://github.com/kanko-tech/VBA_tools/blob/main/src/ExcelVBA/Vector/README.md" target="_blank" rel="noreferrer">Source README</a>
       </div>
       <nav class="page-nav" aria-label="Page navigation">
         <a href="index.html">Overview</a>
-        <a href="vector.html" class="current">Vector</a>
-        <a href="matrix.html">Matrix</a>
-        <a href="datatable.html">DataTable</a>
+        <a href="vector.html" class="current">Vector Guide</a>
+        <a href="matrix.html">Matrix Guide</a>
+        <a href="datatable.html">DataTable Guide</a>
       </nav>
+      <div class="tab-switch" aria-label="Vector pages">
+        <a href="vector.html" class="current">Guide</a>
+        <a href="vector-reference.html">Reference</a>
+      </div>
+      <button class="toc-toggle" type="button" data-toc-toggle aria-expanded="false">目次を開く</button>
     </header>
 
-    <main>
-      <section class="panel">
-        <div class="section-heading">
-          <p class="eyebrow">Use Cases</p>
-          <h2>向いている場面</h2>
-        </div>
-        <div class="grid three">
-          <article class="module-card">
-            <h3>列を一括整形</h3>
-            <p>空欄補完、数値変換、文字列変換などを 1 列単位でまとめて処理できます。</p>
-          </article>
-          <article class="module-card">
-            <h3>条件マスク作成</h3>
-            <p><code>eq</code> や <code>gt</code> で作ったマスクを、`Matrix` や `DataTable` の抽出に渡せます。</p>
-          </article>
-          <article class="module-card">
-            <h3>集計の前処理</h3>
-            <p><code>sum</code> や <code>mean</code> の前に安全な型変換を挟めるので、実務列の整形に向いています。</p>
-          </article>
-        </div>
-      </section>
+    <div class="docs-columns">
+      <main class="doc-main" id="doc-content">
+        <section class="panel" id="overview">
+          <div class="section-heading">
+            <p class="eyebrow">Overview</p>
+            <h2>Vector でできること</h2>
+          </div>
+          <div class="grid three">
+            <article class="module-card">
+              <h3>列データの読み込み</h3>
+              <p><code>read_col_range</code> と <code>read_row_range</code> で、シート上の 1 列または 1 行をそのまま取り込めます。</p>
+            </article>
+            <article class="module-card">
+              <h3>条件マスクの作成</h3>
+              <p><code>eq</code> <code>gt</code> <code>is_empty</code> などで、後続処理に渡しやすいブール配列を作れます。</p>
+            </article>
+            <article class="module-card">
+              <h3>型変換と集計</h3>
+              <p><code>cast_to_double_safe</code> や <code>sum</code> <code>mean</code> で、実務データの整形と集計をまとめて行えます。</p>
+            </article>
+          </div>
+        </section>
 
-      <section class="panel">
-        <div class="section-heading">
-          <p class="eyebrow">Quick Start</p>
-          <h2>最小例</h2>
-        </div>
-        <pre class="code-block"><code>Sub Sample_Vector_QuickStart()
+        <section class="panel" id="who">
+          <div class="section-heading">
+            <p class="eyebrow">Audience</p>
+            <h2>向いている場面</h2>
+          </div>
+          <div class="summary-list">
+            <article class="summary-item">
+              <strong>1 列の値をまとめて扱いたいとき</strong>
+              セルを 1 つずつ読むのではなく、列全体を値の配列として扱いたいケースに向いています。
+            </article>
+            <article class="summary-item">
+              <strong>条件判定だけを独立させたいとき</strong>
+              しきい値判定や空欄判定をマスクとして取り出し、<code>Matrix</code> や <code>DataTable</code> の抽出へ渡せます。
+            </article>
+            <article class="summary-item">
+              <strong>数値化や平均計算をまとめたいとき</strong>
+              文字列混じりの実務データを安全に変換し、そのまま集計までつなげられます。
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="setup">
+          <div class="section-heading">
+            <p class="eyebrow">Setup</p>
+            <h2>導入方法</h2>
+          </div>
+          <div class="step-grid">
+            <article class="step-card">
+              <h3>1. インポート</h3>
+              <p><code>src/ExcelVBA/Vector/Vector.cls</code> を VBA プロジェクトへ取り込みます。</p>
+            </article>
+            <article class="step-card">
+              <h3>2. 読み込み</h3>
+              <p><code>read_col_range</code> または <code>read_row_range</code> で対象範囲を読み込みます。</p>
+            </article>
+            <article class="step-card">
+              <h3>3. 加工</h3>
+              <p>必要に応じて空欄補完、型変換、条件判定、集計を行います。</p>
+            </article>
+            <article class="step-card">
+              <h3>4. 連携</h3>
+              <p>マスクを別モジュールへ渡すか、<code>to_range_vertical</code> などでシートへ戻します。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="quickstart">
+          <div class="section-heading">
+            <p class="eyebrow">Quick Start</p>
+            <h2>最小例</h2>
+          </div>
+          <p class="card-copy">
+            以下は <code>B2:B6</code> の列を読み込み、空欄を <code>0</code> で補完したうえで数値化し、
+            合計と平均を出力する例です。
+          </p>
+          <pre class="code-block"><code>Sub Sample_Vector_QuickStart()
     Dim vec As New Vector
     Dim mask As Variant
 
@@ -72,90 +127,87 @@
     Debug.Print vec.sum
     Debug.Print vec.mean
 End Sub</code></pre>
-      </section>
+        </section>
 
-      <section class="panel">
-        <div class="section-heading">
-          <p class="eyebrow">Methods</p>
-          <h2>メソッドの見取り図</h2>
+        <section class="panel" id="workflow">
+          <div class="section-heading">
+            <p class="eyebrow">Workflow</p>
+            <h2>よくある使い方</h2>
+          </div>
+          <div class="grid two">
+            <article class="doc-note">
+              <h3>マスク作成の部品として使う</h3>
+              <p><code>eq</code> や <code>gt</code> で作ったブール配列は、<code>Matrix.filter_rows</code> や <code>DataTable.set_by_mask</code> の入力に使えます。</p>
+            </article>
+            <article class="doc-note">
+              <h3>集計前の整形に使う</h3>
+              <p>空欄や文字列を含む列でも、<code>fill_empty</code> と <code>cast_to_double_safe</code> を先に通すことで、その後の計算が安定します。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="methods">
+          <div class="section-heading">
+            <p class="eyebrow">Method Groups</p>
+            <h2>メソッドの見取り図</h2>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>カテゴリ</th>
+                  <th>主なメソッド</th>
+                  <th>用途</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>読込</td>
+                  <td><code>read_col_range</code> <code>read_row_range</code> <code>read_array</code></td>
+                  <td>1 列または 1 行の値を読み込む</td>
+                </tr>
+                <tr>
+                  <td>参照</td>
+                  <td><code>data</code> <code>count</code> <code>item</code> <code>type_names</code></td>
+                  <td>読み込んだ値と型を確認する</td>
+                </tr>
+                <tr>
+                  <td>条件判定</td>
+                  <td><code>eq</code> <code>gt</code> <code>is_empty</code></td>
+                  <td>抽出や更新に使うマスクを作る</td>
+                </tr>
+                <tr>
+                  <td>変換・集計</td>
+                  <td><code>cast_to_double_safe</code> <code>fill_empty</code> <code>sum</code> <code>mean</code></td>
+                  <td>実務データの整形と集計を行う</td>
+                </tr>
+                <tr>
+                  <td>出力</td>
+                  <td><code>to_range_vertical</code> <code>to_range_horizontal</code></td>
+                  <td>加工後の値をシートへ戻す</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+
+      <aside class="doc-sidebar">
+        <div class="sidebar-card">
+          <p class="eyebrow">On This Page</p>
+          <h2>目次</h2>
+          <nav data-toc-source="#doc-content"></nav>
+          <div class="doc-note">
+            <h3>次に見るページ</h3>
+            <p>プロパティとメソッドの全解説は Reference ページにまとめています。</p>
+            <div class="tab-switch">
+              <a href="vector-reference.html">Vector Reference</a>
+            </div>
+          </div>
+          <button class="mobile-toc-close" type="button" data-toc-close>閉じる</button>
         </div>
-        <div class="grid two">
-          <article class="card">
-            <h3>読込</h3>
-            <ul class="plain-list">
-              <li><code>read_col_range</code>: 1 列の `Range` を読む</li>
-              <li><code>read_row_range</code>: 1 行の `Range` を読む</li>
-              <li><code>read_array</code>: 一次元配列を読む</li>
-            </ul>
-          </article>
-          <article class="card">
-            <h3>参照</h3>
-            <ul class="plain-list">
-              <li><code>data</code>: 配列コピーを返す</li>
-              <li><code>count</code>: 要素数を返す</li>
-              <li><code>item</code>: 指定要素を返す</li>
-              <li><code>type_names</code>: 型名一覧を返す</li>
-            </ul>
-          </article>
-          <article class="card">
-            <h3>条件マスク</h3>
-            <ul class="plain-list">
-              <li><code>eq</code> / <code>ne</code>: 一致・不一致判定</li>
-              <li><code>gt</code> / <code>ge</code>: 下限比較</li>
-              <li><code>lt</code> / <code>le</code>: 上限比較</li>
-              <li><code>is_empty</code>: 欠損判定</li>
-            </ul>
-          </article>
-          <article class="card">
-            <h3>整形と集計</h3>
-            <ul class="plain-list">
-              <li><code>cast_to_double_safe</code>: 数値化</li>
-              <li><code>cast_to_string_safe</code>: 文字列化</li>
-              <li><code>fill_empty</code>: 欠損補完</li>
-              <li><code>sum</code> / <code>mean</code> / <code>unique</code>: 集計</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <section class="panel">
-        <div class="section-heading">
-          <p class="eyebrow">Recipes</p>
-          <h2>よくある使い方</h2>
-        </div>
-        <div class="grid two">
-          <article class="card">
-            <h3>空欄を 0 にして合計する</h3>
-            <pre class="code-block compact"><code>Dim vec As New Vector
-
-vec.read_col_range Sheet1.Range("D2:D8")
-vec.fill_empty 0
-vec.cast_to_double_safe emptyAsZero:=True, invalidAsZero:=True
-
-Debug.Print vec.sum</code></pre>
-          </article>
-          <article class="card">
-            <h3>`DataTable` と組み合わせる</h3>
-            <pre class="code-block compact"><code>Dim tbl As New DataTable
-Dim scoreVec As Vector
-
-tbl.read_range Sheet1.Range("A1:D10"), hasHeader:=True
-Set scoreVec = tbl.col_vector("score")
-
-scoreVec.cast_to_double_safe emptyAsZero:=True, invalidAsZero:=True
-Debug.Print scoreVec.mean</code></pre>
-          </article>
-        </div>
-      </section>
-
-      <section class="panel">
-        <div class="section-heading">
-          <p class="eyebrow">Reference</p>
-          <h2>メソッド早見表・補足・全メソッド解説</h2>
-        </div>
-        <article class="markdown-body" data-markdown-source="content/vector.md"></article>
-      </section>
-    </main>
+      </aside>
+    </div>
   </div>
 </body>
 </html>

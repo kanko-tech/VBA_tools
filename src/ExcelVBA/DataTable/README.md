@@ -7,9 +7,8 @@
 
 ## これは誰向けか
 
-- Excel の表を VBA で扱う処理を整理したい人
-- 行・列ベースの定型処理を短く書きたい人
-- `Matrix` や `Vector` と組み合わせて表データを扱いたい人
+- Excel の表を VBA で扱う処理を効率的に書きたい人
+- 行列ベースの定型処理を短く書きたい人
 
 ## 何ができるか
 
@@ -21,10 +20,10 @@
 
 ## 使うメリット
 
-セル位置を直接追いかける処理を減らし、「どの列に対して何をするか」をコード上で明確にできます。  
+セル位置（`A1:D8`など）をハードコードする処理を減らし、「どの列に対して何をするか」をコード上で明確にできます。
 そのため、転記ミスや条件分岐の書き間違いを減らしつつ、保守しやすい表処理を書きやすくなります。
 
-## 最低限の使い始め方
+## 最低限の使い方
 
 1. `src/ExcelVBA/DataTable/DataTable.cls` を VBA プロジェクトへインポートします
 2. ヘッダー行を含む表を `read_range` で読み込みます
@@ -32,7 +31,7 @@
 
 ## 最小例
 
-以下は、`A1:D8` の表をヘッダー行付きで読み込み、`status = "OK"` の行だけを抽出して `G1` から書き出す例です。
+以下は、`A1:D8` の表をヘッダー行付きで読み込み、`status = "OK"` の行だけを抽出して `A10` から書き出す例です。
 
 ```vb
 Sub Sample_DataTable_QuickStart()
@@ -42,7 +41,7 @@ Sub Sample_DataTable_QuickStart()
     tbl.read_range Sheet1.Range("A1:D8"), hasHeader:=True
     Set okRows = tbl.filter_by_equals("status", "OK")
 
-    okRows.to_range Sheet1.Range("G1"), includeHeader:=True
+    okRows.to_range Sheet1.Range("A10"), includeHeader:=True
 End Sub
 ```
 

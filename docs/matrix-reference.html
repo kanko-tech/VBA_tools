@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Matrix Reference | VBA_tools</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="page.js" defer></script>
+</head>
+<body>
+  <div class="page-shell docs-layout">
+    <header class="hero detail-hero">
+      <p class="eyebrow">API Reference</p>
+      <h1>Matrix Reference</h1>
+      <p class="lead">
+        <code>Matrix</code> のプロパティとメソッドを、行列操作の観点から整理した技術詳細ページです。
+      </p>
+      <div class="hero-actions">
+        <a href="matrix.html">Back to Guide</a>
+        <a href="https://github.com/kanko-tech/VBA_tools/blob/main/src/ExcelVBA/Matrix/Matrix.cls" target="_blank" rel="noreferrer">Source Class</a>
+      </div>
+      <nav class="page-nav" aria-label="Page navigation">
+        <a href="index.html">Overview</a>
+        <a href="vector.html">Vector</a>
+        <a href="matrix.html" class="current">Matrix</a>
+        <a href="datatable.html">DataTable</a>
+      </nav>
+      <div class="tab-switch">
+        <a href="matrix.html">Guide</a>
+        <a href="matrix-reference.html" class="current">Reference</a>
+      </div>
+      <button class="toc-toggle" type="button" data-toc-toggle aria-expanded="false">目次を開く</button>
+    </header>
+
+    <div class="docs-columns">
+      <main class="doc-main" id="doc-content">
+        <section class="panel" id="loading">
+          <div class="section-heading">
+            <p class="eyebrow">Loading</p>
+            <h2>読込系</h2>
+          </div>
+          <div class="api-grid">
+            <article class="api-card">
+              <h3 id="matrix-read-range">read_range</h3>
+              <div class="api-signature">Sub read_range(ByVal rng As Range)</div>
+              <p>矩形の <code>Range</code> を読み込み、2 次元配列として保持します。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="matrix-read-array">read_array</h3>
+              <div class="api-signature">Sub read_array(ByVal arr As Variant)</div>
+              <p>2 次元配列をそのまま読み込みます。既存配列ロジックから移すときの入口です。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="matrix-read-empty">read_empty</h3>
+              <div class="api-signature">Sub read_empty(ByVal colCount As Long)</div>
+              <p>列数だけを指定して、行数 0 の空の <code>Matrix</code> を作成します。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="properties">
+          <div class="section-heading">
+            <p class="eyebrow">Properties</p>
+            <h2>参照系</h2>
+          </div>
+          <div class="api-grid">
+            <article class="api-card">
+              <h3 id="matrix-is-loaded">is_loaded</h3>
+              <div class="api-signature">Property Get is_loaded() As Boolean</div>
+              <p>値が読み込まれているかを返します。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="row-count">row_count</h3>
+              <div class="api-signature">Property Get row_count() As Long</div>
+              <p>現在の行数を返します。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="col-count">col_count</h3>
+              <div class="api-signature">Property Get col_count() As Long</div>
+              <p>現在の列数を返します。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="matrix-data">data</h3>
+              <div class="api-signature">Property Get data() As Variant</div>
+              <p>内部の 2 次元配列を返します。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="matrix-item">item</h3>
+              <div class="api-signature">Function item(ByVal rowIndex As Long, ByVal colIndex As Long) As Variant</div>
+              <p>指定位置の値を返します。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="row-values">row_values</h3>
+              <div class="api-signature">Function row_values(ByVal rowIndex As Long) As Variant</div>
+              <p>指定行を一次元配列で返します。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="col-values">col_values</h3>
+              <div class="api-signature">Function col_values(ByVal colIndex As Long) As Variant</div>
+              <p>指定列を一次元配列で返します。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="selection">
+          <div class="section-heading">
+            <p class="eyebrow">Selection</p>
+            <h2>抽出・選択系</h2>
+          </div>
+          <div class="api-grid">
+            <article class="api-card">
+              <h3 id="filter-rows">filter_rows</h3>
+              <div class="api-signature">Function filter_rows(ByVal mask As Variant) As Matrix</div>
+              <p>ブール配列に対応する行だけを残した新しい <code>Matrix</code> を返します。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="slice-rows">slice_rows</h3>
+              <div class="api-signature">Function slice_rows(ByVal rowIndexes As Variant) As Matrix</div>
+              <p>指定行番号だけを順番どおりに取り出します。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="select-columns">select_columns</h3>
+              <div class="api-signature">Function select_columns(ByVal columnIndexes As Variant) As Matrix</div>
+              <p>指定列だけを残した新しい <code>Matrix</code> を返します。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="mutation">
+          <div class="section-heading">
+            <p class="eyebrow">Mutation</p>
+            <h2>更新・追加系</h2>
+          </div>
+          <div class="api-grid">
+            <article class="api-card">
+              <h3 id="set-column-values">set_column_values</h3>
+              <div class="api-signature">Sub set_column_values(ByVal colIndex As Long, ByVal values As Variant)</div>
+              <p>指定列の値を一括で置き換えます。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="append-row">append_row</h3>
+              <div class="api-signature">Sub append_row(ByVal values As Variant)</div>
+              <p>末尾へ 1 行追加します。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="append-column">append_column</h3>
+              <div class="api-signature">Sub append_column(ByVal values As Variant)</div>
+              <p>末尾へ 1 列追加します。フラグ列や計算列の追加に使えます。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="output">
+          <div class="section-heading">
+            <p class="eyebrow">Output</p>
+            <h2>整形・出力・状態管理</h2>
+          </div>
+          <div class="api-grid">
+            <article class="api-card">
+              <h3 id="transpose">transpose</h3>
+              <div class="api-signature">Function transpose() As Matrix</div>
+              <p>転置した新しい <code>Matrix</code> を返します。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="to-range">to_range</h3>
+              <div class="api-signature">Sub to_range(ByVal topLeft As Range)</div>
+              <p>現在の表を指定セルからシートへ出力します。行数 0 の <code>Matrix</code> は出力できません。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="matrix-clear">clear</h3>
+              <div class="api-signature">Sub clear()</div>
+              <p>内部状態を初期化します。再利用前のリセット用です。</p>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <aside class="doc-sidebar">
+        <div class="sidebar-card">
+          <p class="eyebrow">On This Page</p>
+          <h2>目次</h2>
+          <nav data-toc-source="#doc-content"></nav>
+          <div class="doc-note">
+            <h3>関連ページ</h3>
+            <p>導入と利用場面は Guide ページで確認できます。</p>
+            <div class="tab-switch">
+              <a href="matrix.html">Matrix Guide</a>
+            </div>
+          </div>
+          <button class="mobile-toc-close" type="button" data-toc-close>閉じる</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</body>
+</html>

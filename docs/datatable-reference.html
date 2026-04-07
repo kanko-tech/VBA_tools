@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DataTable Reference | VBA_tools</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="page.js" defer></script>
+</head>
+<body>
+  <div class="page-shell docs-layout">
+    <header class="hero detail-hero">
+      <p class="eyebrow">API Reference</p>
+      <h1>DataTable Reference</h1>
+      <p class="lead">
+        <code>DataTable</code> のプロパティとメソッドを、列名付き表データの操作単位で整理した技術詳細ページです。
+      </p>
+      <div class="hero-actions">
+        <a href="datatable.html">Back to Guide</a>
+        <a href="https://github.com/kanko-tech/VBA_tools/blob/main/src/ExcelVBA/DataTable/DataTable.cls" target="_blank" rel="noreferrer">Source Class</a>
+      </div>
+      <nav class="page-nav" aria-label="Page navigation">
+        <a href="index.html">Overview</a>
+        <a href="vector.html">Vector</a>
+        <a href="matrix.html">Matrix</a>
+        <a href="datatable.html" class="current">DataTable</a>
+      </nav>
+      <div class="tab-switch">
+        <a href="datatable.html">Guide</a>
+        <a href="datatable-reference.html" class="current">Reference</a>
+      </div>
+      <button class="toc-toggle" type="button" data-toc-toggle aria-expanded="false">目次を開く</button>
+    </header>
+
+    <div class="docs-columns">
+      <main class="doc-main" id="doc-content">
+        <section class="panel" id="loading">
+          <div class="section-heading">
+            <p class="eyebrow">Loading</p>
+            <h2>読込系</h2>
+          </div>
+          <div class="api-grid">
+            <article class="api-card">
+              <h3 id="datatable-read-range">read_range</h3>
+              <div class="api-signature">Sub read_range(ByVal rng As Range, Optional ByVal hasHeader As Boolean = True)</div>
+              <p>シート上の表を読み込みます。既定では 1 行目をヘッダー行として扱います。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="datatable-read-matrix">read_matrix</h3>
+              <div class="api-signature">Sub read_matrix(ByVal src As Matrix, ByVal columnNames As Variant)</div>
+              <p><code>Matrix</code> と列名配列から <code>DataTable</code> を構築します。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="properties">
+          <div class="section-heading">
+            <p class="eyebrow">Properties</p>
+            <h2>参照系</h2>
+          </div>
+          <div class="api-grid">
+            <article class="api-card">
+              <h3 id="datatable-is-loaded">is_loaded</h3>
+              <div class="api-signature">Property Get is_loaded() As Boolean</div>
+              <p>データが読み込み済みかを返します。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="datatable-row-count">row_count</h3>
+              <div class="api-signature">Property Get row_count() As Long</div>
+              <p>本文の行数を返します。ヘッダー行は含みません。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="datatable-col-count">col_count</h3>
+              <div class="api-signature">Property Get col_count() As Long</div>
+              <p>列数を返します。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="column-names">column_names</h3>
+              <div class="api-signature">Property Get column_names() As Variant</div>
+              <p>列名の配列を返します。UI 表示や外部連携の確認に便利です。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="matrix-property">matrix</h3>
+              <div class="api-signature">Property Get matrix() As Matrix</div>
+              <p>内部表現を <code>Matrix</code> として返します。低レベルの処理へ戻したいときに使います。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="col">col</h3>
+              <div class="api-signature">Function col(ByVal columnName As String) As Variant</div>
+              <p>指定列を一次元配列として返します。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="col-vector">col_vector</h3>
+              <div class="api-signature">Function col_vector(ByVal columnName As String) As Vector</div>
+              <p>指定列を <code>Vector</code> として返します。条件判定や集計と組み合わせやすくなります。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="filters">
+          <div class="section-heading">
+            <p class="eyebrow">Filtering</p>
+            <h2>抽出系</h2>
+          </div>
+          <div class="api-grid">
+            <article class="api-card">
+              <h3 id="filter-by-mask">filter_by_mask</h3>
+              <div class="api-signature">Function filter_by_mask(ByVal mask As Variant) As DataTable</div>
+              <p>ブール配列に対応する行だけを残した新しい <code>DataTable</code> を返します。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="filter-by-equals">filter_by_equals</h3>
+              <div class="api-signature">Function filter_by_equals(ByVal columnName As String, ByVal matchValue As Variant) As DataTable</div>
+              <p>指定列が一致する行だけを抽出します。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="filter-by-in">filter_by_in</h3>
+              <div class="api-signature">Function filter_by_in(ByVal columnName As String, ByVal matchValues As Variant) As DataTable</div>
+              <p>候補配列のいずれかに一致する行を抽出します。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="filter-by-contains">filter_by_contains</h3>
+              <div class="api-signature">Function filter_by_contains(ByVal columnName As String, ByVal searchText As String, Optional ByVal caseSensitive As Boolean = False) As DataTable</div>
+              <p>部分一致で行を抽出します。テキスト検索向けです。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="filter-by-all-equals">filter_by_all_equals</h3>
+              <div class="api-signature">Function filter_by_all_equals(ByVal columnNames As Variant, ByVal matchValues As Variant) As DataTable</div>
+              <p>複数列の AND 条件で抽出します。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="filter-by-any-equals">filter_by_any_equals</h3>
+              <div class="api-signature">Function filter_by_any_equals(ByVal columnNames As Variant, ByVal matchValues As Variant) As DataTable</div>
+              <p>複数列の OR 条件で抽出します。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="select-columns">select_columns</h3>
+              <div class="api-signature">Function select_columns(ByVal columnNames As Variant) As DataTable</div>
+              <p>必要な列だけを残した新しい <code>DataTable</code> を返します。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="updates">
+          <div class="section-heading">
+            <p class="eyebrow">Updates</p>
+            <h2>更新・整形系</h2>
+          </div>
+          <div class="api-grid">
+            <article class="api-card">
+              <h3 id="add-column">add_column</h3>
+              <div class="api-signature">Sub add_column(ByVal columnName As String, Optional ByVal values As Variant)</div>
+              <p>新しい列を追加します。値を省略した場合は空欄列として追加されます。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="rename-column">rename_column</h3>
+              <div class="api-signature">Sub rename_column(ByVal oldName As String, ByVal newName As String)</div>
+              <p>列名を変更します。既存列との重複はできません。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="sort-by">sort_by</h3>
+              <div class="api-signature">Sub sort_by(ByVal columnName As String, Optional ByVal ascending As Boolean = True)</div>
+              <p>指定列で並べ替えます。昇順・降順を切り替えられます。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="set-by-mask">set_by_mask</h3>
+              <div class="api-signature">Sub set_by_mask(ByVal mask As Variant, ByVal columnName As String, ByVal newValue As Variant)</div>
+              <p>ブール配列が <code>True</code> の行だけを更新します。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="set-by-equals">set_by_equals</h3>
+              <div class="api-signature">Sub set_by_equals(ByVal conditionColumnName As String, ByVal matchValue As Variant, ByVal targetColumnName As String, ByVal newValue As Variant)</div>
+              <p>条件列が一致した行だけ、対象列を更新します。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="set-column">set_column</h3>
+              <div class="api-signature">Sub set_column(ByVal columnName As String, ByVal values As Variant)</div>
+              <p>指定列全体を新しい値配列で置き換えます。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="output">
+          <div class="section-heading">
+            <p class="eyebrow">Output</p>
+            <h2>出力・状態管理</h2>
+          </div>
+          <div class="api-grid">
+            <article class="api-card">
+              <h3 id="datatable-to-range">to_range</h3>
+              <div class="api-signature">Sub to_range(ByVal topLeft As Range, Optional ByVal includeHeader As Boolean = True)</div>
+              <p>指定セルからシートへ出力します。必要に応じてヘッダー行の有無を切り替えられます。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="datatable-clear">clear</h3>
+              <div class="api-signature">Sub clear()</div>
+              <p>内部状態を初期化します。同じ変数を再利用したいときのリセット用です。</p>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <aside class="doc-sidebar">
+        <div class="sidebar-card">
+          <p class="eyebrow">On This Page</p>
+          <h2>目次</h2>
+          <nav data-toc-source="#doc-content"></nav>
+          <div class="doc-note">
+            <h3>関連ページ</h3>
+            <p>導入と利用場面は Guide ページで確認できます。</p>
+            <div class="tab-switch">
+              <a href="datatable.html">DataTable Guide</a>
+            </div>
+          </div>
+          <button class="mobile-toc-close" type="button" data-toc-close>閉じる</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</body>
+</html>

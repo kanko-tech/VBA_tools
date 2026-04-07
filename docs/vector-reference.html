@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vector Reference | VBA_tools</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="page.js" defer></script>
+</head>
+<body>
+  <div class="page-shell docs-layout">
+    <header class="hero detail-hero">
+      <p class="eyebrow">API Reference</p>
+      <h1>Vector Reference</h1>
+      <p class="lead">
+        <code>Vector</code> のプロパティとメソッドを、役割ごとに整理した技術詳細ページです。
+        返り値、用途、注意点を確認しながら実装へ接続できます。
+      </p>
+      <div class="hero-actions">
+        <a href="vector.html">Back to Guide</a>
+        <a href="https://github.com/kanko-tech/VBA_tools/blob/main/src/ExcelVBA/Vector/Vector.cls" target="_blank" rel="noreferrer">Source Class</a>
+      </div>
+      <nav class="page-nav" aria-label="Page navigation">
+        <a href="index.html">Overview</a>
+        <a href="vector.html" class="current">Vector</a>
+        <a href="matrix.html">Matrix</a>
+        <a href="datatable.html">DataTable</a>
+      </nav>
+      <div class="tab-switch">
+        <a href="vector.html">Guide</a>
+        <a href="vector-reference.html" class="current">Reference</a>
+      </div>
+      <button class="toc-toggle" type="button" data-toc-toggle aria-expanded="false">目次を開く</button>
+    </header>
+
+    <div class="docs-columns">
+      <main class="doc-main" id="doc-content">
+        <section class="panel" id="loading">
+          <div class="section-heading">
+            <p class="eyebrow">Loading</p>
+            <h2>読込系</h2>
+          </div>
+          <div class="api-grid">
+            <article class="api-card">
+              <h3 id="read-col-range">read_col_range</h3>
+              <div class="api-signature">Sub read_col_range(ByVal rng As Range)</div>
+              <p>1 列の <code>Range</code> を読み込みます。縦方向の値をそのまま内部配列へ格納します。</p>
+              <div class="api-meta">
+                <div><strong>用途</strong> シート上の列データを <code>Vector</code> 化したいとき</div>
+                <div><strong>注意</strong> 複数列の範囲は想定外です</div>
+              </div>
+            </article>
+            <article class="api-card">
+              <h3 id="read-row-range">read_row_range</h3>
+              <div class="api-signature">Sub read_row_range(ByVal rng As Range)</div>
+              <p>1 行の <code>Range</code> を読み込みます。横方向の値を内部配列として保持します。</p>
+              <div class="api-meta">
+                <div><strong>用途</strong> 見出し行や横並びの設定値を扱うとき</div>
+                <div><strong>注意</strong> 複数行の範囲は対象外です</div>
+              </div>
+            </article>
+            <article class="api-card">
+              <h3 id="read-array">read_array</h3>
+              <div class="api-signature">Sub read_array(ByVal arr As Variant)</div>
+              <p>一次元配列をそのまま読み込みます。既存の配列処理から <code>Vector</code> に移したいときの入口です。</p>
+              <div class="api-meta">
+                <div><strong>用途</strong> VBA 内で作った配列をクラスメソッドで扱いたいとき</div>
+                <div><strong>注意</strong> 二次元配列は受け付けません</div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="properties">
+          <div class="section-heading">
+            <p class="eyebrow">Properties</p>
+            <h2>参照系</h2>
+          </div>
+          <div class="api-grid">
+            <article class="api-card">
+              <h3 id="is-loaded">is_loaded</h3>
+              <div class="api-signature">Property Get is_loaded() As Boolean</div>
+              <p>値が読み込まれているかを返します。事前チェックやデバッグ向けです。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="data">data</h3>
+              <div class="api-signature">Property Get data() As Variant</div>
+              <p>内部の一次元配列を返します。他モジュールや自前ロジックへ値を渡すときに使います。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="count">count</h3>
+              <div class="api-signature">Property Get count() As Long</div>
+              <p>要素数を返します。ループや空チェックの基準になります。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="item">item</h3>
+              <div class="api-signature">Function item(ByVal index As Long) As Variant</div>
+              <p>指定位置の値を返します。個別確認や条件分岐の補助に使えます。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="type-names">type_names</h3>
+              <div class="api-signature">Property Get type_names() As Variant</div>
+              <p>各要素の <code>TypeName</code> を返します。データ品質の確認に向いています。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="conditions">
+          <div class="section-heading">
+            <p class="eyebrow">Conditions</p>
+            <h2>条件マスク系</h2>
+          </div>
+          <div class="api-grid">
+            <article class="api-card">
+              <h3 id="eq">eq</h3>
+              <div class="api-signature">Function eq(ByVal matchValue As Variant) As Variant</div>
+              <p>一致判定のブール配列を返します。最も基本的な絞り込み条件です。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="ne">ne</h3>
+              <div class="api-signature">Function ne(ByVal matchValue As Variant) As Variant</div>
+              <p>不一致判定のブール配列を返します。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="gt-ge">gt / ge</h3>
+              <div class="api-signature">Function gt(ByVal threshold As Variant) As Variant</div>
+              <div class="api-signature">Function ge(ByVal threshold As Variant) As Variant</div>
+              <p>しきい値より大きい、または以上の条件を作ります。数値列の判定によく使います。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="lt-le">lt / le</h3>
+              <div class="api-signature">Function lt(ByVal threshold As Variant) As Variant</div>
+              <div class="api-signature">Function le(ByVal threshold As Variant) As Variant</div>
+              <p>しきい値より小さい、または以下の条件を作ります。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="is-empty">is_empty</h3>
+              <div class="api-signature">Function is_empty(Optional ByVal treatBlankStringAsEmpty As Boolean = True) As Variant</div>
+              <p>空欄判定のブール配列を返します。空文字を空欄扱いするかも指定できます。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="transform">
+          <div class="section-heading">
+            <p class="eyebrow">Transform</p>
+            <h2>変換・更新系</h2>
+          </div>
+          <div class="api-grid">
+            <article class="api-card">
+              <h3 id="cast-double">cast_to_double_safe</h3>
+              <div class="api-signature">Sub cast_to_double_safe(Optional emptyAsZero As Boolean = False, Optional invalidAsZero As Boolean = False, Optional treatDateAsInvalid As Boolean = True)</div>
+              <p>値を安全に <code>Double</code> へ変換します。空欄や変換失敗時の扱いも指定できます。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="cast-string">cast_to_string_safe</h3>
+              <div class="api-signature">Sub cast_to_string_safe(Optional emptyAsBlank As Boolean = True, Optional errorAsBlank As Boolean = True)</div>
+              <p>値を文字列へ揃えます。表示用や比較前の正規化に向いています。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="cast-date">cast_to_date_safe</h3>
+              <div class="api-signature">Sub cast_to_date_safe(Optional ByVal invalidAsEmpty As Boolean = True)</div>
+              <p>日付として解釈できる値を <code>Date</code> に変換します。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="fill-empty">fill_empty</h3>
+              <div class="api-signature">Sub fill_empty(ByVal fillValue As Variant, Optional ByVal treatBlankStringAsEmpty As Boolean = True)</div>
+              <p>空欄や空文字を指定値で埋めます。数値化や集計の前処理として使いやすいです。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="map">map</h3>
+              <div class="api-signature">Sub map(ByVal functionName As String)</div>
+              <p>各要素へ同じ関数を適用して値を更新します。ルールベースの変換を共通化したいときに向いています。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="aggregate">
+          <div class="section-heading">
+            <p class="eyebrow">Aggregate</p>
+            <h2>集計系</h2>
+          </div>
+          <div class="api-grid">
+            <article class="api-card">
+              <h3 id="unique">unique</h3>
+              <div class="api-signature">Function unique() As Variant</div>
+              <p>重複を除いた値の配列を返します。カテゴリ一覧の作成などに使えます。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="sum">sum</h3>
+              <div class="api-signature">Function sum() As Double</div>
+              <p>数値要素の合計を返します。事前に <code>cast_to_double_safe</code> を通すと安定します。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="mean">mean</h3>
+              <div class="api-signature">Function mean() As Double</div>
+              <p>数値要素の平均を返します。集計結果の確認用に使いやすいメソッドです。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="output">
+          <div class="section-heading">
+            <p class="eyebrow">Output</p>
+            <h2>出力・状態管理</h2>
+          </div>
+          <div class="api-grid">
+            <article class="api-card">
+              <h3 id="to-range-vertical">to_range_vertical</h3>
+              <div class="api-signature">Sub to_range_vertical(ByVal topLeft As Range)</div>
+              <p>値を縦方向へ書き出します。列として結果を確認したいときに向いています。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="to-range-horizontal">to_range_horizontal</h3>
+              <div class="api-signature">Sub to_range_horizontal(ByVal topLeft As Range)</div>
+              <p>値を横方向へ書き出します。見出し行や簡易確認用の出力に向いています。</p>
+            </article>
+            <article class="api-card">
+              <h3 id="clear">clear</h3>
+              <div class="api-signature">Sub clear()</div>
+              <p>内部状態を初期化します。同じインスタンスを再利用したいときのリセット用です。</p>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <aside class="doc-sidebar">
+        <div class="sidebar-card">
+          <p class="eyebrow">On This Page</p>
+          <h2>目次</h2>
+          <nav data-toc-source="#doc-content"></nav>
+          <div class="doc-note">
+            <h3>関連ページ</h3>
+            <p>導入と利用場面の整理は Guide ページにあります。</p>
+            <div class="tab-switch">
+              <a href="vector.html">Vector Guide</a>
+            </div>
+          </div>
+          <button class="mobile-toc-close" type="button" data-toc-close>閉じる</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</body>
+</html>
