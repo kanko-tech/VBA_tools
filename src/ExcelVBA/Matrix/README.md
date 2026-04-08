@@ -10,7 +10,7 @@
 
 ## 詳細ドキュメント
 
-- Pages ガイド: [Matrix Guide](https://kanko-tech.github.io/VBA_tools/matrix.html)
+- Pages: [Matrix](https://kanko-tech.github.io/VBA_tools/matrix.html)
 - ソース配置: `src/ExcelVBA/Matrix`
 
 ## まず何ができるか
@@ -43,3 +43,9 @@ Sub Sample_Matrix_QuickStart()
     picked.to_range Sheet1.Range("F2")
 End Sub
 ```
+
+## 関連ページ
+
+- 導入方法: [Matrix 導入方法](https://kanko-tech.github.io/VBA_tools/matrix-setup.html)
+- 使い方: [Matrix 使い方](https://kanko-tech.github.io/VBA_tools/matrix-examples.html)
+- リファレンス: [Matrix リファレンス](https://kanko-tech.github.io/VBA_tools/matrix-reference.html)

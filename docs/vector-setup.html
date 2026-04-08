@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Vector Setup | VBA_tools</title>
+  <title>Vector 導入方法 | VBA_tools</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -22,78 +22,85 @@
       </div>
       <div class="hero-meta">
         <h1>Vector</h1>
-        <p class="hero-subline">1 次元データの読み込み、条件マスク、型変換、集計のためのクラス</p>
+        <p class="hero-subline">1 次元データの読み込み、条件マスク、型変換、集計のためのクラスモジュール</p>
       </div>
+      <nav class="global-nav" aria-label="Vector child pages">
+        <ul class="global-nav-list">
+          <li class="global-nav-item">
+            <a class="global-nav-link current" href="vector-setup.html">導入方法</a>
+          </li>
+          <li class="global-nav-item">
+            <a class="global-nav-link" href="vector-examples.html">使い方</a>
+          </li>
+          <li class="global-nav-item">
+            <a class="global-nav-link" href="vector-reference.html">リファレンス</a>
+          </li>
+        </ul>
+      </nav>
 
       <button class="toc-toggle" type="button" data-toc-toggle aria-expanded="false">目次を開く</button>
     </header>
 
     <div class="docs-columns">
       <main class="doc-main" id="doc-content">
-        <section class="panel" id="import">
-          <div class="section-heading">
-            <p class="eyebrow">Import</p>
-            <h2>取り込むファイル</h2>
-          </div>
-          <div class="directory-stack">
-        <a href="https://github.com/kanko-tech/VBA_tools/blob/main/src/ExcelVBA/Vector/Vector.cls" target="_blank" rel="noreferrer">Vector.cls<small>このモジュールだけで単独利用できます</small></a>
-          </div>
-        </section>
-
         <section class="panel" id="steps">
           <div class="section-heading">
             <p class="eyebrow">Steps</p>
             <h2>導入手順</h2>
           </div>
-          <div class="number-grid">
-            <article class="number-card"><strong>1</strong><p>VBE でクラスモジュールをインポートし、名前が <code>Vector</code> であることを確認します。</p></article>
-            <article class="number-card"><strong>2</strong><p>シート上に 1 列または 1 行のサンプルデータを用意します。</p></article>
-            <article class="number-card"><strong>3</strong><p><code>read_col_range</code> か <code>read_row_range</code> を呼び、読み込みます。</p></article>
-            <article class="number-card"><strong>4</strong><p><code>count</code> や <code>to_range_vertical</code> で正しく読み込めたか確認します。</p></article>
+          <div class="step-stack">
+            <article class="step-item">
+              <div class="step-item-head">
+                <span class="step-number">1</span>
+                <h3><code>Vector.cls</code> をダウンロードする</h3>
+              </div>
+              <p><code>Vector</code> は単体で使えるクラスです。まずは下のリンクから <code>Vector.cls</code> を保存します。</p>
+              <div class="inline-link-list">
+                <a href="https://raw.githubusercontent.com/kanko-tech/VBA_tools/main/src/ExcelVBA/Vector/Vector.cls" target="_blank" rel="noreferrer">Vector.cls<small>そのままインポートできるクラスモジュール</small></a>
+              </div>
+            </article>
+            <article class="step-item">
+              <div class="step-item-head">
+                <span class="step-number">2</span>
+                <h3>Excel の VBE を開く</h3>
+              </div>
+              <p>対象ブックを開いた状態で <code>Alt + F11</code> を押し、Visual Basic Editor を開きます。Project Explorer が見えていない場合は <code>Ctrl + R</code> で表示します。</p>
+            </article>
+            <article class="step-item">
+              <div class="step-item-head">
+                <span class="step-number">3</span>
+                <h3>クラスモジュールをインポートする</h3>
+              </div>
+              <p>VBE のメニューから <code>ファイル &gt; ファイルのインポート</code> を選び、保存した <code>Vector.cls</code> を指定します。Project Explorer の <code>Class Modules</code> 配下に <code>Vector</code> が追加されれば取り込み完了です。</p>
+            </article>
+            <article class="step-item">
+              <div class="step-item-head">
+                <span class="step-number">4</span>
+                <h3>正常に取り込めたか確認する</h3>
+              </div>
+              <p>Project Explorer に <code>Vector</code> が見えていることを確認したうえで、イミディエイトウィンドウを開いて型名を確認します。</p>
+              <pre class="code-block"><code>? TypeName(New Vector)</code></pre>
+            </article>
           </div>
-        </section>
-
-        <section class="panel" id="first-run">
-          <div class="section-heading">
-            <p class="eyebrow">First Run</p>
-            <h2>最初の実行コード</h2>
-          </div>
-          <pre class="code-block"><code>Sub Vector_FirstRun()
-    Dim vec As New Vector
-
-    vec.read_col_range Sheet1.Range("B2:B5")
-    vec.fill_empty 0
-
-    Debug.Print vec.count
-    vec.to_range_vertical Sheet1.Range("D2")
-End Sub</code></pre>
         </section>
 
         <section class="panel" id="checks">
           <div class="section-heading">
             <p class="eyebrow">Checks</p>
-            <h2>確認ポイント</h2>
+            <h2>インポート確認</h2>
           </div>
           <ul class="checklist">
-            <li>対象 Range が 1 列または 1 行になっていること</li>
-            <li>数値集計前に必要なら <code>fill_empty</code> や <code>cast_to_double_safe</code> を通すこと</li>
-            <li>別モジュールへ渡す場合は戻り値のマスクの長さをそろえること</li>
+            <li>Project Explorer の <code>Class Modules</code> に <code>Vector</code> が追加されていること</li>
+            <li>イミディエイトウィンドウで <code>TypeName(New Vector)</code> を実行し、<code>Vector</code> と表示されること</li>
+            <li>この段階ではまだサンプルデータの読み込みや集計を行わず、取り込み確認だけで止めること</li>
           </ul>
         </section>
       </main>
 
       <aside class="doc-sidebar">
         <div class="sidebar-card">
-          <p class="eyebrow">Vector Pages</p>
-          <h2>ローカルナビ</h2>
-          <nav class="local-nav-list">
-            <a href="vector-setup.html" class="current">導入方法</a>
-            <a href="vector-examples.html">使い方</a>
-            <a href="vector-reference.html">リファレンス</a>
-          </nav>
-          <hr class="sidebar-sep">
           <p class="eyebrow">On This Page</p>
-          <h3>目次</h3>
+          <h2>目次</h2>
           <nav data-toc-source="#doc-content"></nav>
           <button class="mobile-toc-close" type="button" data-toc-close>閉じる</button>
         </div>

@@ -10,7 +10,7 @@
 
 ## 詳細ドキュメント
 
-- Pages ガイド: [Vector Guide](https://kanko-tech.github.io/VBA_tools/vector.html)
+- Pages: [Vector](https://kanko-tech.github.io/VBA_tools/vector.html)
 - ソース配置: `src/ExcelVBA/Vector`
 
 ## まず何ができるか
@@ -37,3 +37,9 @@ Sub Sample_Vector_QuickStart()
     Debug.Print vec.mean
 End Sub
 ```
+
+## 関連ページ
+
+- 導入方法: [Vector 導入方法](https://kanko-tech.github.io/VBA_tools/vector-setup.html)
+- 使い方: [Vector 使い方](https://kanko-tech.github.io/VBA_tools/vector-examples.html)
+- リファレンス: [Vector リファレンス](https://kanko-tech.github.io/VBA_tools/vector-reference.html)

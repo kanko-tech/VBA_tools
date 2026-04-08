@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DataTable Examples | VBA_tools</title>
+  <title>DataTable 使い方 | VBA_tools</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -22,8 +22,21 @@
       </div>
       <div class="hero-meta">
         <h1>DataTable</h1>
-        <p class="hero-subline">ヘッダー付きの表を列名ベースで扱うためのクラス</p>
+        <p class="hero-subline">ヘッダー付きの表を列名ベースで扱うためのクラスモジュール</p>
       </div>
+      <nav class="global-nav" aria-label="DataTable child pages">
+        <ul class="global-nav-list">
+          <li class="global-nav-item">
+            <a class="global-nav-link" href="datatable-setup.html">導入方法</a>
+          </li>
+          <li class="global-nav-item">
+            <a class="global-nav-link current" href="datatable-examples.html">使い方</a>
+          </li>
+          <li class="global-nav-item">
+            <a class="global-nav-link" href="datatable-reference.html">リファレンス</a>
+          </li>
+        </ul>
+      </nav>
 
       <button class="toc-toggle" type="button" data-toc-toggle aria-expanded="false">目次を開く</button>
     </header>
@@ -35,73 +48,108 @@
             <p class="eyebrow">Sample Data</p>
             <h2>共通サンプルデータ</h2>
           </div>
-          <div class="table-wrap">
-            <table class="sample-table">
-              <thead><tr><th>id</th><th>status</th><th>amount</th><th>owner</th></tr></thead>
-              <tbody>
-                <tr><td>1</td><td>OK</td><td>120</td><td>A</td></tr>
-                <tr><td>2</td><td>NG</td><td>80</td><td>B</td></tr>
-                <tr><td>3</td><td>OK</td><td>210</td><td>A</td></tr>
-                <tr><td>4</td><td>WAIT</td><td>95</td><td>C</td></tr>
-              </tbody>
-            </table>
+          <div class="download-inline">
+            <a href="downloads/excelvba-sample-data.xlsm" download>共通サンプル xlsm をダウンロード<small>DataTable の例で使うヘッダー付き一覧を収録</small></a>
+          </div>
+          <div class="excel-preview">
+            <div class="excel-preview-head">
+              <strong>売上明細</strong>
+              <span>Sheet: 売上明細 / Range: B4:H12</span>
+            </div>
+            <div class="table-wrap excel-table-wrap">
+              <table class="sample-table excel-table">
+                <thead>
+                  <tr>
+                    <th>受注ID</th>
+                    <th>拠点</th>
+                    <th>担当者</th>
+                    <th>商品区分</th>
+                    <th>売上金額</th>
+                    <th>請求状況</th>
+                    <th>入金予定日</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>SO-240501</td><td>東京</td><td>佐藤</td><td>保守契約</td><td>120000</td><td>請求済</td><td>2026-04-30</td></tr>
+                  <tr><td>SO-240502</td><td>大阪</td><td>田中</td><td>導入支援</td><td>98000</td><td>未請求</td><td>2026-05-10</td></tr>
+                  <tr><td>SO-240503</td><td>名古屋</td><td>鈴木</td><td>保守契約</td><td>(空欄)</td><td>請求保留</td><td>(空欄)</td></tr>
+                  <tr><td>SO-240504</td><td>福岡</td><td>高橋</td><td>追加開発</td><td>153000</td><td>請求済</td><td>2026-04-28</td></tr>
+                  <tr><td>SO-240505</td><td>東京</td><td>伊藤</td><td>導入支援</td><td>87500</td><td>未請求</td><td>2026-05-15</td></tr>
+                  <tr><td>SO-240506</td><td>大阪</td><td>中村</td><td>教育</td><td>64000</td><td>入金済</td><td>2026-04-18</td></tr>
+                  <tr><td>SO-240507</td><td>仙台</td><td>小林</td><td>保守契約</td><td>(空欄)</td><td>請求保留</td><td>(空欄)</td></tr>
+                  <tr><td>SO-240508</td><td>東京</td><td>加藤</td><td>追加開発</td><td>201000</td><td>請求済</td><td>2026-04-25</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </section>
 
         <section class="panel" id="example-filter">
           <div class="section-heading">
             <p class="eyebrow">Example 1</p>
-            <h2>状態が OK の行だけ抽出する</h2>
+            <h2>請求済の案件だけを抽出する</h2>
           </div>
           <pre class="code-block"><code>Dim tbl As New DataTable
-Dim okRows As DataTable
+Dim billedRows As DataTable
 
-tbl.read_range Sheet1.Range("A1:D5"), hasHeader:=True
-Set okRows = tbl.filter_by_equals("status", "OK")
-okRows.to_range Sheet1.Range("G1"), includeHeader:=True</code></pre>
-          <p class="panel-lead">レポート対象の行だけを残し、ヘッダーごと別の場所へ出力できます。</p>
+With Worksheets("売上明細")
+    tbl.read_range .Range("B4:H12"), hasHeader:=True
+End With
+
+Set billedRows = tbl.filter_by_equals("請求状況", "請求済")
+billedRows.to_range Worksheets("売上明細").Range("J4"), includeHeader:=True</code></pre>
+          <p class="panel-lead">ヘッダー付きの一覧から請求済だけを抜き出し、確認用の別表を同じシート右側に作る例です。</p>
         </section>
 
         <section class="panel" id="example-add">
           <div class="section-heading">
             <p class="eyebrow">Example 2</p>
-            <h2>派生列を追加する</h2>
+            <h2>優先区分の列を追加して埋める</h2>
           </div>
           <pre class="code-block"><code>Dim tbl As New DataTable
+Dim amountVec As Vector
+Dim highAmountMask As Variant
 
-tbl.read_range Sheet1.Range("A1:D5"), hasHeader:=True
-tbl.add_column "priority", Array("high", "low", "high", "mid")
-tbl.to_range Sheet1.Range("G1"), includeHeader:=True</code></pre>
-          <p class="panel-lead">後続の判定や表示用に、元データにはない派生列を付け足せます。</p>
+With Worksheets("売上明細")
+    tbl.read_range .Range("B4:H12"), hasHeader:=True
+End With
+
+tbl.add_column "優先区分"
+Set amountVec = tbl.col_vector("売上金額")
+amountVec.fill_empty 0
+amountVec.cast_to_double_safe emptyAsZero:=True, invalidAsZero:=True
+highAmountMask = amountVec.gt(100000)
+
+tbl.set_by_mask highAmountMask, "優先区分", "要確認"
+tbl.set_by_equals "請求状況", "請求保留", "優先区分", "確認待ち"
+tbl.to_range Worksheets("売上明細").Range("J4"), includeHeader:=True</code></pre>
+          <p class="panel-lead">元の列を壊さずに派生列を足し、売上金額や請求状況をもとに優先度を付ける実務寄りの例です。</p>
         </section>
 
         <section class="panel" id="example-update">
           <div class="section-heading">
             <p class="eyebrow">Example 3</p>
-            <h2>条件に合う行だけ値を更新する</h2>
+            <h2>拠点を絞って売上順に並べ替える</h2>
           </div>
           <pre class="code-block"><code>Dim tbl As New DataTable
+Dim picked As DataTable
 
-tbl.read_range Sheet1.Range("A1:D5"), hasHeader:=True
-tbl.set_by_equals "status", "WAIT", "owner", "UNASSIGNED"
-tbl.sort_by "amount", ascending:=False
-tbl.to_range Sheet1.Range("G1"), includeHeader:=True</code></pre>
-          <p class="panel-lead">業務上のルールを列名ベースで書けるので、セル位置依存のコードを減らせます。</p>
+With Worksheets("売上明細")
+    tbl.read_range .Range("B4:H12"), hasHeader:=True
+End With
+
+Set picked = tbl.filter_by_in("拠点", Array("東京", "大阪"))
+picked.sort_by "売上金額", ascending:=False
+Set picked = picked.select_columns(Array("受注ID", "拠点", "担当者", "売上金額", "請求状況"))
+picked.to_range Worksheets("売上明細").Range("J4"), includeHeader:=True</code></pre>
+          <p class="panel-lead">列名ベースで絞り込み、必要列だけに整えたうえで売上順に並べ替えることで、共有しやすい一覧を短く書けます。</p>
         </section>
       </main>
 
       <aside class="doc-sidebar">
         <div class="sidebar-card">
-          <p class="eyebrow">DataTable Pages</p>
-          <h2>ローカルナビ</h2>
-          <nav class="local-nav-list">
-            <a href="datatable-setup.html">導入方法</a>
-            <a href="datatable-examples.html" class="current">使い方</a>
-            <a href="datatable-reference.html">リファレンス</a>
-          </nav>
-          <hr class="sidebar-sep">
           <p class="eyebrow">On This Page</p>
-          <h3>目次</h3>
+          <h2>目次</h2>
           <nav data-toc-source="#doc-content"></nav>
           <button class="mobile-toc-close" type="button" data-toc-close>閉じる</button>
         </div>

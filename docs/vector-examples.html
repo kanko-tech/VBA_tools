@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Vector Examples | VBA_tools</title>
+  <title>Vector 使い方 | VBA_tools</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -22,8 +22,21 @@
       </div>
       <div class="hero-meta">
         <h1>Vector</h1>
-        <p class="hero-subline">1 次元データの読み込み、条件マスク、型変換、集計のためのクラス</p>
+        <p class="hero-subline">1 次元データの読み込み、条件マスク、型変換、集計のためのクラスモジュール</p>
       </div>
+      <nav class="global-nav" aria-label="Vector child pages">
+        <ul class="global-nav-list">
+          <li class="global-nav-item">
+            <a class="global-nav-link" href="vector-setup.html">導入方法</a>
+          </li>
+          <li class="global-nav-item">
+            <a class="global-nav-link current" href="vector-examples.html">使い方</a>
+          </li>
+          <li class="global-nav-item">
+            <a class="global-nav-link" href="vector-reference.html">リファレンス</a>
+          </li>
+        </ul>
+      </nav>
 
       <button class="toc-toggle" type="button" data-toc-toggle aria-expanded="false">目次を開く</button>
     </header>
@@ -35,78 +48,100 @@
             <p class="eyebrow">Sample Data</p>
             <h2>共通サンプルデータ</h2>
           </div>
-          <div class="table-wrap">
-            <table class="sample-table">
-              <thead><tr><th>セル</th><th>値</th></tr></thead>
-              <tbody>
-                <tr><td>B2</td><td>120</td></tr>
-                <tr><td>B3</td><td>95</td></tr>
-                <tr><td>B4</td><td>(空欄)</td></tr>
-                <tr><td>B5</td><td>210</td></tr>
-                <tr><td>B6</td><td>88</td></tr>
-              </tbody>
-            </table>
+          <div class="download-inline">
+            <a href="downloads/excelvba-sample-data.xlsm" download>共通サンプル xlsm をダウンロード<small>Excel VBA の例で使う 2 シート入りブック</small></a>
+          </div>
+          <div class="excel-preview">
+            <div class="excel-preview-head">
+              <strong>売上明細</strong>
+              <span>Sheet: 売上明細 / Range: B4:H12</span>
+            </div>
+            <div class="table-wrap excel-table-wrap">
+              <table class="sample-table excel-table">
+                <thead>
+                  <tr>
+                    <th>受注ID</th>
+                    <th>拠点</th>
+                    <th>担当者</th>
+                    <th>商品区分</th>
+                    <th>売上金額</th>
+                    <th>請求状況</th>
+                    <th>入金予定日</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>SO-240501</td><td>東京</td><td>佐藤</td><td>保守契約</td><td>120000</td><td>請求済</td><td>2026-04-30</td></tr>
+                  <tr><td>SO-240502</td><td>大阪</td><td>田中</td><td>導入支援</td><td>98000</td><td>未請求</td><td>2026-05-10</td></tr>
+                  <tr><td>SO-240503</td><td>名古屋</td><td>鈴木</td><td>保守契約</td><td>(空欄)</td><td>請求保留</td><td>(空欄)</td></tr>
+                  <tr><td>SO-240504</td><td>福岡</td><td>高橋</td><td>追加開発</td><td>153000</td><td>請求済</td><td>2026-04-28</td></tr>
+                  <tr><td>SO-240505</td><td>東京</td><td>伊藤</td><td>導入支援</td><td>87500</td><td>未請求</td><td>2026-05-15</td></tr>
+                  <tr><td>SO-240506</td><td>大阪</td><td>中村</td><td>教育</td><td>64000</td><td>入金済</td><td>2026-04-18</td></tr>
+                  <tr><td>SO-240507</td><td>仙台</td><td>小林</td><td>保守契約</td><td>(空欄)</td><td>請求保留</td><td>(空欄)</td></tr>
+                  <tr><td>SO-240508</td><td>東京</td><td>加藤</td><td>追加開発</td><td>201000</td><td>請求済</td><td>2026-04-25</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </section>
 
         <section class="panel" id="example-filter">
           <div class="section-heading">
             <p class="eyebrow">Example 1</p>
-            <h2>閾値を超える行のマスクを作る</h2>
+            <h2>売上金額列を整形して合計と平均を出す</h2>
           </div>
-          <pre class="code-block"><code>Dim vec As New Vector
-Dim mask As Variant
+          <pre class="code-block"><code>Dim amountVec As New Vector
 
-vec.read_col_range Sheet1.Range("B2:B6")
-vec.fill_empty 0
-vec.cast_to_double_safe emptyAsZero:=True, invalidAsZero:=True
-mask = vec.gt(100)</code></pre>
-          <p class="panel-lead">出力は <code>Array(True, False, False, True, False)</code> のような Boolean 配列です。Matrix や DataTable の抽出条件としてそのまま使えます。</p>
+With Worksheets("売上明細")
+    amountVec.read_col_range .Range("F5:F12")
+End With
+
+amountVec.fill_empty 0
+amountVec.cast_to_double_safe emptyAsZero:=True, invalidAsZero:=True
+
+Debug.Print amountVec.sum
+Debug.Print amountVec.mean</code></pre>
+          <p class="panel-lead">売上金額は <code>売上明細!F5:F12</code> を使います。空欄を 0 にそろえてから集計することで、月次の合計や平均をそのまま確認できます。</p>
         </section>
 
         <section class="panel" id="example-summary">
           <div class="section-heading">
             <p class="eyebrow">Example 2</p>
-            <h2>空欄を補完して合計と平均を出す</h2>
+            <h2>10 万円超の案件マスクを作る</h2>
           </div>
-          <pre class="code-block"><code>Dim vec As New Vector
+          <pre class="code-block"><code>Dim amountVec As New Vector
+Dim highAmountMask As Variant
 
-vec.read_col_range Sheet1.Range("B2:B6")
-vec.fill_empty 0
-vec.cast_to_double_safe emptyAsZero:=True, invalidAsZero:=True
+With Worksheets("売上明細")
+    amountVec.read_col_range .Range("F5:F12")
+End With
 
-Debug.Print vec.sum
-Debug.Print vec.mean</code></pre>
-          <p class="panel-lead">売上や件数のような列を、レポート前に軽く整形して集計したいときの最小パターンです。</p>
+amountVec.fill_empty 0
+amountVec.cast_to_double_safe emptyAsZero:=True, invalidAsZero:=True
+highAmountMask = amountVec.gt(100000)</code></pre>
+          <p class="panel-lead">作成した <code>highAmountMask</code> は、あとで <code>Matrix.filter_rows</code> や <code>DataTable.set_by_mask</code> へ渡せます。実務では「要確認金額以上の案件だけ拾う」用途に向きます。</p>
         </section>
 
         <section class="panel" id="example-output">
           <div class="section-heading">
             <p class="eyebrow">Example 3</p>
-            <h2>整形した列を別領域へ出力する</h2>
+            <h2>入金予定日列を日付型にそろえて別領域へ出す</h2>
           </div>
-          <pre class="code-block"><code>Dim vec As New Vector
+          <pre class="code-block"><code>Dim dueVec As New Vector
 
-vec.read_col_range Sheet1.Range("B2:B6")
-vec.fill_empty "(missing)"
-vec.cast_to_string_safe
-vec.to_range_vertical Sheet1.Range("D2")</code></pre>
-          <p class="panel-lead">入力列をそのまま壊さず、別領域に整形済みの結果を並べたいときに使います。</p>
+With Worksheets("売上明細")
+    dueVec.read_col_range .Range("H5:H12")
+End With
+
+dueVec.cast_to_date_safe invalidAsEmpty:=True
+dueVec.to_range_vertical Worksheets("売上明細").Range("J5")</code></pre>
+          <p class="panel-lead">未設定の入金予定日は空のまま残し、日付として読める値だけをそろえて <code>J5</code> から確認できます。元の一覧は壊さず、横に確認列を作る想定です。</p>
         </section>
       </main>
 
       <aside class="doc-sidebar">
         <div class="sidebar-card">
-          <p class="eyebrow">Vector Pages</p>
-          <h2>ローカルナビ</h2>
-          <nav class="local-nav-list">
-            <a href="vector-setup.html">導入方法</a>
-            <a href="vector-examples.html" class="current">使い方</a>
-            <a href="vector-reference.html">リファレンス</a>
-          </nav>
-          <hr class="sidebar-sep">
           <p class="eyebrow">On This Page</p>
-          <h3>目次</h3>
+          <h2>目次</h2>
           <nav data-toc-source="#doc-content"></nav>
           <button class="mobile-toc-close" type="button" data-toc-close>閉じる</button>
         </div>

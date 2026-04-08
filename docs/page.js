@@ -1,13 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
   const body = document.body;
+  const sidebar = document.querySelector(".doc-sidebar");
   const toggle = document.querySelector("[data-toc-toggle]");
   const closeButtons = document.querySelectorAll("[data-toc-close]");
   const tocTargets = document.querySelectorAll("[data-toc-source]");
   const scrollTopButton = document.createElement("button");
+  let tocFabButton = null;
 
   scrollTopButton.type = "button";
   scrollTopButton.className = "scroll-top-button";
-  scrollTopButton.setAttribute("aria-label", "ページ上部へ戻る");
+  scrollTopButton.setAttribute("aria-label", "ページ上部へ移動");
   scrollTopButton.textContent = "∧";
 
   const slugify = (text) =>
@@ -17,9 +19,16 @@ document.addEventListener("DOMContentLoaded", () => {
       .replace(/[^\w\u3040-\u30ff\u3400-\u9fbf -]/g, "")
       .replace(/\s+/g, "-");
 
+  const openToc = () => {
+    body.classList.add("toc-open");
+    if (toggle) toggle.setAttribute("aria-expanded", "true");
+    if (tocFabButton) tocFabButton.setAttribute("aria-expanded", "true");
+  };
+
   const closeToc = () => {
     body.classList.remove("toc-open");
     if (toggle) toggle.setAttribute("aria-expanded", "false");
+    if (tocFabButton) tocFabButton.setAttribute("aria-expanded", "false");
   };
 
   const updateScrollTopButton = () => {
@@ -28,9 +37,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (toggle) {
     toggle.addEventListener("click", () => {
-      const isOpen = body.classList.toggle("toc-open");
-      toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      if (body.classList.contains("toc-open")) {
+        closeToc();
+      } else {
+        openToc();
+      }
     });
+  }
+
+  if (sidebar) {
+    tocFabButton = document.createElement("button");
+    tocFabButton.type = "button";
+    tocFabButton.className = "toc-fab-button";
+    tocFabButton.setAttribute("aria-label", "目次を開く");
+    tocFabButton.setAttribute("aria-expanded", "false");
+    tocFabButton.textContent = "目次";
+    tocFabButton.addEventListener("click", () => {
+      if (body.classList.contains("toc-open")) {
+        closeToc();
+      } else {
+        openToc();
+      }
+    });
+    body.appendChild(tocFabButton);
   }
 
   closeButtons.forEach((button) => {
@@ -43,6 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!body.classList.contains("toc-open")) return;
     if (target.closest(".doc-sidebar")) return;
     if (target.closest("[data-toc-toggle]")) return;
+    if (target.closest(".toc-fab-button")) return;
     closeToc();
   });
 

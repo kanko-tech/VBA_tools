@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Matrix Examples | VBA_tools</title>
+  <title>Matrix 使い方 | VBA_tools</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -22,8 +22,21 @@
       </div>
       <div class="hero-meta">
         <h1>Matrix</h1>
-        <p class="hero-subline">矩形データの読み込み、行抽出、列選択、転置のための 2 次元クラス</p>
+        <p class="hero-subline">矩形データの読み込み、行抽出、列選択、転置のための 2 次元クラスモジュール</p>
       </div>
+      <nav class="global-nav" aria-label="Matrix child pages">
+        <ul class="global-nav-list">
+          <li class="global-nav-item">
+            <a class="global-nav-link" href="matrix-setup.html">導入方法</a>
+          </li>
+          <li class="global-nav-item">
+            <a class="global-nav-link current" href="matrix-examples.html">使い方</a>
+          </li>
+          <li class="global-nav-item">
+            <a class="global-nav-link" href="matrix-reference.html">リファレンス</a>
+          </li>
+        </ul>
+      </nav>
 
       <button class="toc-toggle" type="button" data-toc-toggle aria-expanded="false">目次を開く</button>
     </header>
@@ -35,74 +48,98 @@
             <p class="eyebrow">Sample Data</p>
             <h2>共通サンプルデータ</h2>
           </div>
-          <div class="table-wrap">
-            <table class="sample-table">
-              <thead><tr><th>ID</th><th>Status</th><th>Amount</th></tr></thead>
-              <tbody>
-                <tr><td>1</td><td>OK</td><td>120</td></tr>
-                <tr><td>2</td><td>NG</td><td>80</td></tr>
-                <tr><td>3</td><td>OK</td><td>210</td></tr>
-                <tr><td>4</td><td>WAIT</td><td>95</td></tr>
-              </tbody>
-            </table>
+          <div class="download-inline">
+            <a href="downloads/excelvba-sample-data.xlsm" download>共通サンプル xlsm をダウンロード<small>Matrix の例で使う貼付データを含むブック</small></a>
+          </div>
+          <div class="excel-preview">
+            <div class="excel-preview-head">
+              <strong>貼付_部門別集計</strong>
+              <span>Sheet: 貼付_部門別集計 / Range: B4:F10</span>
+            </div>
+            <div class="table-wrap excel-table-wrap">
+              <table class="sample-table excel-table">
+                <thead>
+                  <tr>
+                    <th>拠点</th>
+                    <th>商品区分</th>
+                    <th>案件数</th>
+                    <th>4月売上</th>
+                    <th>5月売上</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>東京</td><td>保守契約</td><td>12</td><td>980000</td><td>1040000</td></tr>
+                  <tr><td>東京</td><td>導入支援</td><td>5</td><td>630000</td><td>590000</td></tr>
+                  <tr><td>大阪</td><td>保守契約</td><td>8</td><td>720000</td><td>765000</td></tr>
+                  <tr><td>名古屋</td><td>導入支援</td><td>3</td><td>410000</td><td>370000</td></tr>
+                  <tr><td>福岡</td><td>追加開発</td><td>2</td><td>550000</td><td>610000</td></tr>
+                  <tr><td>仙台</td><td>教育</td><td>4</td><td>240000</td><td>260000</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </section>
 
         <section class="panel" id="example-rows">
           <div class="section-heading">
             <p class="eyebrow">Example 1</p>
-            <h2>マスクで行抽出する</h2>
+            <h2>案件数が 5 件以上の行だけ残す</h2>
           </div>
           <pre class="code-block"><code>Dim mat As New Matrix
-Dim mask(1 To 4) As Boolean
+Dim caseCounts As Variant
+Dim mask() As Boolean
+Dim i As Long
 
-mat.read_range Sheet1.Range("A2:C5")
-mask(1) = True
-mask(2) = False
-mask(3) = True
-mask(4) = False
+With Worksheets("貼付_部門別集計")
+    mat.read_range .Range("B5:F10")
+End With
 
-mat.filter_rows(mask).to_range Sheet1.Range("F2")</code></pre>
-          <p class="panel-lead">別モジュールで作ったマスクを受けて、対象行だけを別領域へ展開できます。</p>
+caseCounts = mat.col_values(3)
+ReDim mask(1 To mat.row_count)
+
+For i = 1 To mat.row_count
+    mask(i) = CLng(caseCounts(i)) >= 5
+Next i
+
+mat.filter_rows(mask).to_range Worksheets("貼付_部門別集計").Range("H5")</code></pre>
+          <p class="panel-lead">貼付済みの集計表から、レビュー対象の行だけを別ブロックへ抜き出す例です。<code>B5:F10</code> はヘッダーを除いたデータ本体として扱っています。</p>
         </section>
 
         <section class="panel" id="example-columns">
           <div class="section-heading">
             <p class="eyebrow">Example 2</p>
-            <h2>必要な列だけに絞る</h2>
+            <h2>報告に必要な列だけを抜き出す</h2>
           </div>
           <pre class="code-block"><code>Dim mat As New Matrix
 
-mat.read_range Sheet1.Range("A2:C5")
-mat.select_columns(Array(1, 3)).to_range Sheet1.Range("J2")</code></pre>
-          <p class="panel-lead">ID と Amount だけを抜き出して、報告用の表を別で作るような使い方に向きます。</p>
+With Worksheets("貼付_部門別集計")
+    mat.read_range .Range("B4:F10")
+End With
+
+mat.select_columns(Array(1, 4, 5)).to_range Worksheets("貼付_部門別集計").Range("H4")</code></pre>
+          <p class="panel-lead">もとの貼付表から「拠点」「4月売上」「5月売上」だけを抜き出し、比較用の簡易表を横に作る想定です。</p>
         </section>
 
         <section class="panel" id="example-transpose">
           <div class="section-heading">
             <p class="eyebrow">Example 3</p>
-            <h2>転置して比較しやすくする</h2>
+            <h2>転置して月次比較用の見え方に変える</h2>
           </div>
           <pre class="code-block"><code>Dim mat As New Matrix
 
-mat.read_range Sheet1.Range("A2:C5")
-mat.transpose.to_range Sheet1.Range("N2")</code></pre>
-          <p class="panel-lead">行方向に並ぶ比較表を作りたいときや、別モジュールへ渡す前に形を整えたいときに便利です。</p>
+With Worksheets("貼付_部門別集計")
+    mat.read_range .Range("B4:F10")
+End With
+
+mat.select_columns(Array(1, 4, 5)).transpose.to_range Worksheets("貼付_部門別集計").Range("N4")</code></pre>
+          <p class="panel-lead">横方向に並べた比較表が必要なときは、必要列だけを抜いたあとに転置すると整理しやすくなります。</p>
         </section>
       </main>
 
       <aside class="doc-sidebar">
         <div class="sidebar-card">
-          <p class="eyebrow">Matrix Pages</p>
-          <h2>ローカルナビ</h2>
-          <nav class="local-nav-list">
-            <a href="matrix-setup.html">導入方法</a>
-            <a href="matrix-examples.html" class="current">使い方</a>
-            <a href="matrix-reference.html">リファレンス</a>
-          </nav>
-          <hr class="sidebar-sep">
           <p class="eyebrow">On This Page</p>
-          <h3>目次</h3>
+          <h2>目次</h2>
           <nav data-toc-source="#doc-content"></nav>
           <button class="mobile-toc-close" type="button" data-toc-close>閉じる</button>
         </div>

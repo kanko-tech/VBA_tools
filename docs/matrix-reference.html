@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Matrix Reference | VBA_tools</title>
+  <title>Matrix リファレンス | VBA_tools</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script src="page.js" defer></script>
 </head>
-<body class="reference-page">
+<body>
   <div class="page-shell docs-layout">
     <header class="hero detail-hero">
       <div class="position-strip" aria-label="Page position">
@@ -22,30 +22,31 @@
       </div>
       <div class="hero-meta">
         <h1>Matrix</h1>
-        <p class="hero-subline">矩形データの読み込み、行抽出、列選択、転置のための 2 次元クラス</p>
+        <p class="hero-subline">矩形データの読み込み、行抽出、列選択、転置のための 2 次元クラスモジュール</p>
       </div>
+      <nav class="global-nav" aria-label="Matrix child pages">
+        <ul class="global-nav-list">
+          <li class="global-nav-item">
+            <a class="global-nav-link" href="matrix-setup.html">導入方法</a>
+          </li>
+          <li class="global-nav-item">
+            <a class="global-nav-link" href="matrix-examples.html">使い方</a>
+          </li>
+          <li class="global-nav-item">
+            <a class="global-nav-link current" href="matrix-reference.html">リファレンス</a>
+          </li>
+        </ul>
+      </nav>
 
       <button class="toc-toggle" type="button" data-toc-toggle aria-expanded="false">目次を開く</button>
     </header>
 
     <div class="docs-columns">
       <main class="doc-main" id="doc-content">
-        <section class="panel" id="class-outline">
-          <div class="section-heading">
-            <p class="eyebrow">Class Outline</p>
-            <h2>クラス概要</h2>
-          </div>
-          <div class="info-pills">
-            <div class="info-pill"><strong>責務</strong> 2 次元データの読込、抽出、列選択、形状変更、出力</div>
-            <div class="info-pill"><strong>主な入力</strong> <code>Range</code>、2 次元配列、列数付き空行列</div>
-            <div class="info-pill"><strong>主な出力</strong> Matrix、Range</div>
-          </div>
-        </section>
-
         <section class="panel" id="properties">
           <div class="section-heading">
             <p class="eyebrow">Properties</p>
-            <h2>主要プロパティ</h2>
+            <h2>プロパティ</h2>
           </div>
           <div class="table-wrap">
             <table>
@@ -53,34 +54,34 @@
                 <tr>
                   <th>名前</th>
                   <th>型</th>
-                  <th>意味</th>
+                  <th>説明</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td><code>is_loaded</code></td>
                   <td><code>Boolean</code></td>
-                  <td>データが読み込まれているかを返します。</td>
+                  <td>内部に矩形データが読み込まれているとき <code>True</code> を返します。</td>
                 </tr>
                 <tr>
                   <td><code>row_count</code></td>
                   <td><code>Long</code></td>
-                  <td>行数を返します。</td>
+                  <td>データ行数を返します。</td>
                 </tr>
                 <tr>
                   <td><code>col_count</code></td>
                   <td><code>Long</code></td>
-                  <td>列数を返します。</td>
+                  <td>データ列数を返します。</td>
                 </tr>
                 <tr>
                   <td><code>data</code></td>
                   <td><code>Variant</code></td>
-                  <td>内部の 2 次元配列を返します。</td>
+                  <td>内部で保持している 2 次元配列を返します。</td>
                 </tr>
                 <tr>
-                  <td><code>item(row, col)</code></td>
+                  <td><code>item(rowIndex, colIndex)</code></td>
                   <td><code>Variant</code></td>
-                  <td>指定位置の要素を返します。</td>
+                  <td>指定した行と列の交点にある値を返します。添字は 1 始まりです。</td>
                 </tr>
               </tbody>
             </table>
@@ -89,96 +90,114 @@
 
         <section class="panel" id="methods">
           <div class="section-heading">
-            <p class="eyebrow">Method Groups</p>
-            <h2>主要メソッド群</h2>
+            <p class="eyebrow">Methods</p>
+            <h2>メソッド</h2>
           </div>
           <div class="table-wrap">
             <table>
               <thead>
                 <tr>
                   <th>カテゴリ</th>
-                  <th>主なメソッド</th>
-                  <th>戻り値 / 効果</th>
+                  <th>シグネチャ</th>
+                  <th>戻り値</th>
+                  <th>説明</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td>読込</td>
-                  <td><code>read_range</code> <code>read_array</code> <code>read_empty</code></td>
-                  <td>内部に 2 次元データをロードします。</td>
+                  <td><code>read_range(rng As Range)</code></td>
+                  <td><code>Sub</code></td>
+                  <td>矩形の Range を 2 次元配列として読み込みます。</td>
+                </tr>
+                <tr>
+                  <td>読込</td>
+                  <td><code>read_array(arr As Variant)</code></td>
+                  <td><code>Sub</code></td>
+                  <td>2 次元配列をそのまま内部データとして読み込みます。</td>
+                </tr>
+                <tr>
+                  <td>読込</td>
+                  <td><code>read_empty(colCount As Long)</code></td>
+                  <td><code>Sub</code></td>
+                  <td>指定列数を持つ空の Matrix を初期化します。</td>
                 </tr>
                 <tr>
                   <td>参照</td>
-                  <td><code>row_values</code> <code>col_values</code></td>
-                  <td>特定行や列を配列として取り出します。</td>
+                  <td><code>row_values(rowIndex As Long)</code></td>
+                  <td><code>Variant</code></td>
+                  <td>指定行を 1 次元配列として返します。</td>
+                </tr>
+                <tr>
+                  <td>参照</td>
+                  <td><code>col_values(colIndex As Long)</code></td>
+                  <td><code>Variant</code></td>
+                  <td>指定列を 1 次元配列として返します。</td>
                 </tr>
                 <tr>
                   <td>抽出</td>
-                  <td><code>filter_rows</code> <code>slice_rows</code> <code>select_columns</code></td>
-                  <td>条件に合う Matrix を返します。</td>
+                  <td><code>filter_rows(mask As Variant)</code></td>
+                  <td><code>Matrix</code></td>
+                  <td>真偽値マスクに合う行だけを持つ新しい Matrix を返します。</td>
+                </tr>
+                <tr>
+                  <td>抽出</td>
+                  <td><code>slice_rows(rowIndexes As Variant)</code></td>
+                  <td><code>Matrix</code></td>
+                  <td>指定した行番号だけを取り出した新しい Matrix を返します。</td>
+                </tr>
+                <tr>
+                  <td>抽出</td>
+                  <td><code>select_columns(columnIndexes As Variant)</code></td>
+                  <td><code>Matrix</code></td>
+                  <td>指定した列番号だけを残した新しい Matrix を返します。</td>
                 </tr>
                 <tr>
                   <td>更新</td>
-                  <td><code>set_column_values</code> <code>append_row</code> <code>append_column</code></td>
-                  <td>内部の行列を更新します。</td>
+                  <td><code>set_column_values(colIndex As Long, values As Variant)</code></td>
+                  <td><code>Sub</code></td>
+                  <td>指定列の値をまとめて上書きします。</td>
+                </tr>
+                <tr>
+                  <td>更新</td>
+                  <td><code>append_row(values As Variant)</code></td>
+                  <td><code>Sub</code></td>
+                  <td>末尾に 1 行追加します。</td>
+                </tr>
+                <tr>
+                  <td>更新</td>
+                  <td><code>append_column(values As Variant)</code></td>
+                  <td><code>Sub</code></td>
+                  <td>右端に 1 列追加します。</td>
                 </tr>
                 <tr>
                   <td>形状変更</td>
-                  <td><code>transpose</code></td>
-                  <td>転置した新しい Matrix を返します。</td>
+                  <td><code>transpose()</code></td>
+                  <td><code>Matrix</code></td>
+                  <td>行列を転置した新しい Matrix を返します。</td>
                 </tr>
                 <tr>
                   <td>出力</td>
-                  <td><code>to_range</code></td>
-                  <td>シートへ矩形のまま書き戻します。</td>
+                  <td><code>to_range(topLeft As Range)</code></td>
+                  <td><code>Sub</code></td>
+                  <td>内部データを指定セルから矩形で書き戻します。</td>
                 </tr>
                 <tr>
                   <td>状態管理</td>
-                  <td><code>clear</code></td>
-                  <td>内部状態を空に戻します。</td>
+                  <td><code>clear()</code></td>
+                  <td><code>Sub</code></td>
+                  <td>内部データと読み込み状態を初期化します。</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </section>
-
-        <section class="panel" id="signatures">
-          <div class="section-heading">
-            <p class="eyebrow">Key Signatures</p>
-            <h2>よく使うシグネチャ</h2>
-          </div>
-          <pre class="code-block"><code>Public Sub read_range(ByVal rng As Range)
-Public Function filter_rows(ByVal mask As Variant) As Matrix
-Public Function select_columns(ByVal columnIndexes As Variant) As Matrix
-Public Function transpose() As Matrix
-Public Sub to_range(ByVal topLeft As Range)</code></pre>
-        </section>
-
-        <section class="panel" id="notes">
-          <div class="section-heading">
-            <p class="eyebrow">Usage Notes</p>
-            <h2>利用上の注意</h2>
-          </div>
-          <ul class="checklist">
-            <li>行抽出に使うマスクの長さは行数と一致させます。</li>
-            <li>列選択や列更新は 1 始まりの列番号で指定する前提です。</li>
-            <li>列名ベースの処理に進む場合は、整形後に DataTable へ受け渡すと責務が明確になります。</li>
-          </ul>
-        </section>
       </main>
 
       <aside class="doc-sidebar">
         <div class="sidebar-card">
-          <p class="eyebrow">Matrix Pages</p>
-          <h2>ローカルナビ</h2>
-          <nav class="local-nav-list" aria-label="Matrix local navigation">
-            <a href="matrix-setup.html">導入方法</a>
-            <a href="matrix-examples.html">使い方</a>
-            <a href="matrix-reference.html" class="current">リファレンス</a>
-          </nav>
-          <hr class="sidebar-sep">
           <p class="eyebrow">On This Page</p>
-          <h3>目次</h3>
+          <h2>目次</h2>
           <nav data-toc-source="#doc-content"></nav>
           <button class="mobile-toc-close" type="button" data-toc-close>閉じる</button>
         </div>

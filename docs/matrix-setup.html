@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Matrix Setup | VBA_tools</title>
+  <title>Matrix 導入方法 | VBA_tools</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -22,80 +22,85 @@
       </div>
       <div class="hero-meta">
         <h1>Matrix</h1>
-        <p class="hero-subline">矩形データの読み込み、行抽出、列選択、転置のための 2 次元クラス</p>
+        <p class="hero-subline">矩形データの読み込み、行抽出、列選択、転置のための 2 次元クラスモジュール</p>
       </div>
+      <nav class="global-nav" aria-label="Matrix child pages">
+        <ul class="global-nav-list">
+          <li class="global-nav-item">
+            <a class="global-nav-link current" href="matrix-setup.html">導入方法</a>
+          </li>
+          <li class="global-nav-item">
+            <a class="global-nav-link" href="matrix-examples.html">使い方</a>
+          </li>
+          <li class="global-nav-item">
+            <a class="global-nav-link" href="matrix-reference.html">リファレンス</a>
+          </li>
+        </ul>
+      </nav>
 
       <button class="toc-toggle" type="button" data-toc-toggle aria-expanded="false">目次を開く</button>
     </header>
 
     <div class="docs-columns">
       <main class="doc-main" id="doc-content">
-        <section class="panel" id="import">
-          <div class="section-heading">
-            <p class="eyebrow">Import</p>
-            <h2>取り込むファイル</h2>
-          </div>
-          <div class="directory-stack">
-        <a href="https://github.com/kanko-tech/VBA_tools/blob/main/src/ExcelVBA/Matrix/Matrix.cls" target="_blank" rel="noreferrer">Matrix.cls<small>矩形データ専用のクラスです</small></a>
-          </div>
-        </section>
-
         <section class="panel" id="steps">
           <div class="section-heading">
             <p class="eyebrow">Steps</p>
             <h2>導入手順</h2>
           </div>
-          <div class="number-grid">
-            <article class="number-card"><strong>1</strong><p>クラスモジュールをインポートし、名前が <code>Matrix</code> であることを確認します。</p></article>
-            <article class="number-card"><strong>2</strong><p>読み込む矩形範囲を用意し、空白行や列を含めるか事前に決めます。</p></article>
-            <article class="number-card"><strong>3</strong><p><code>read_range</code> で読み込み、必要ならマスクや列番号配列を準備します。</p></article>
-            <article class="number-card"><strong>4</strong><p><code>to_range</code> や <code>row_count</code> / <code>col_count</code> で結果を確認します。</p></article>
+          <div class="step-stack">
+            <article class="step-item">
+              <div class="step-item-head">
+                <span class="step-number">1</span>
+                <h3><code>Matrix.cls</code> をダウンロードする</h3>
+              </div>
+              <p><code>Matrix</code> は単体で使えるクラスです。まずは下のリンクから <code>Matrix.cls</code> を保存します。</p>
+              <div class="inline-link-list">
+                <a href="https://raw.githubusercontent.com/kanko-tech/VBA_tools/main/src/ExcelVBA/Matrix/Matrix.cls" target="_blank" rel="noreferrer">Matrix.cls<small>矩形データを扱うクラスモジュール</small></a>
+              </div>
+            </article>
+            <article class="step-item">
+              <div class="step-item-head">
+                <span class="step-number">2</span>
+                <h3>Excel の VBE を開く</h3>
+              </div>
+              <p>対象ブックを開いた状態で <code>Alt + F11</code> を押し、Visual Basic Editor を開きます。Project Explorer が見えていない場合は <code>Ctrl + R</code> で表示します。</p>
+            </article>
+            <article class="step-item">
+              <div class="step-item-head">
+                <span class="step-number">3</span>
+                <h3>クラスモジュールをインポートする</h3>
+              </div>
+              <p>VBE のメニューから <code>ファイル &gt; ファイルのインポート</code> を選び、保存した <code>Matrix.cls</code> を指定します。Project Explorer の <code>Class Modules</code> 配下に <code>Matrix</code> が追加されれば取り込み完了です。</p>
+            </article>
+            <article class="step-item">
+              <div class="step-item-head">
+                <span class="step-number">4</span>
+                <h3>正常に取り込めたか確認する</h3>
+              </div>
+              <p>Project Explorer に <code>Matrix</code> が見えていることを確認したうえで、イミディエイトウィンドウから型名を確認します。</p>
+              <pre class="code-block"><code>? TypeName(New Matrix)</code></pre>
+            </article>
           </div>
-        </section>
-
-        <section class="panel" id="first-run">
-          <div class="section-heading">
-            <p class="eyebrow">First Run</p>
-            <h2>最初の実行コード</h2>
-          </div>
-          <pre class="code-block"><code>Sub Matrix_FirstRun()
-    Dim mat As New Matrix
-    Dim mask(1 To 3) As Boolean
-
-    mat.read_range Sheet1.Range("A2:C4")
-    mask(1) = True
-    mask(2) = False
-    mask(3) = True
-
-    mat.filter_rows(mask).to_range Sheet1.Range("F2")
-End Sub</code></pre>
         </section>
 
         <section class="panel" id="checks">
           <div class="section-heading">
             <p class="eyebrow">Checks</p>
-            <h2>確認ポイント</h2>
+            <h2>インポート確認</h2>
           </div>
           <ul class="checklist">
-            <li>抽出に使うマスクの長さが行数と一致していること</li>
-            <li>列番号は 1 始まりで指定すること</li>
-            <li>列名ベースの処理へ進むなら、この段階で DataTable へ渡すかを決めること</li>
+            <li>Project Explorer の <code>Class Modules</code> に <code>Matrix</code> が追加されていること</li>
+            <li>イミディエイトウィンドウで <code>TypeName(New Matrix)</code> を実行し、<code>Matrix</code> と表示されること</li>
+            <li>このページではまだデータ抽出や列選択までは進めず、取り込み確認だけで止めること</li>
           </ul>
         </section>
       </main>
 
       <aside class="doc-sidebar">
         <div class="sidebar-card">
-          <p class="eyebrow">Matrix Pages</p>
-          <h2>ローカルナビ</h2>
-          <nav class="local-nav-list">
-            <a href="matrix-setup.html" class="current">導入方法</a>
-            <a href="matrix-examples.html">使い方</a>
-            <a href="matrix-reference.html">リファレンス</a>
-          </nav>
-          <hr class="sidebar-sep">
           <p class="eyebrow">On This Page</p>
-          <h3>目次</h3>
+          <h2>目次</h2>
           <nav data-toc-source="#doc-content"></nav>
           <button class="mobile-toc-close" type="button" data-toc-close>閉じる</button>
         </div>

@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Vector Reference | VBA_tools</title>
+  <title>Vector リファレンス | VBA_tools</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script src="page.js" defer></script>
 </head>
-<body class="reference-page">
+<body>
   <div class="page-shell docs-layout">
     <header class="hero detail-hero">
       <div class="position-strip" aria-label="Page position">
@@ -22,30 +22,31 @@
       </div>
       <div class="hero-meta">
         <h1>Vector</h1>
-        <p class="hero-subline">1 次元データの読み込み、条件マスク、型変換、集計のためのクラス</p>
+        <p class="hero-subline">1 次元データの読み込み、条件マスク、型変換、集計のためのクラスモジュール</p>
       </div>
+      <nav class="global-nav" aria-label="Vector child pages">
+        <ul class="global-nav-list">
+          <li class="global-nav-item">
+            <a class="global-nav-link" href="vector-setup.html">導入方法</a>
+          </li>
+          <li class="global-nav-item">
+            <a class="global-nav-link" href="vector-examples.html">使い方</a>
+          </li>
+          <li class="global-nav-item">
+            <a class="global-nav-link current" href="vector-reference.html">リファレンス</a>
+          </li>
+        </ul>
+      </nav>
 
       <button class="toc-toggle" type="button" data-toc-toggle aria-expanded="false">目次を開く</button>
     </header>
 
     <div class="docs-columns">
       <main class="doc-main" id="doc-content">
-        <section class="panel" id="class-outline">
-          <div class="section-heading">
-            <p class="eyebrow">Class Outline</p>
-            <h2>クラス概要</h2>
-          </div>
-          <div class="info-pills">
-            <div class="info-pill"><strong>責務</strong> 1 次元データの読み込み、条件判定、型変換、集計、書き戻し</div>
-            <div class="info-pill"><strong>主な入力</strong> <code>Range</code>、1 次元配列</div>
-            <div class="info-pill"><strong>主な出力</strong> <code>Variant</code> 配列、<code>Double</code>、Range</div>
-          </div>
-        </section>
-
         <section class="panel" id="properties">
           <div class="section-heading">
             <p class="eyebrow">Properties</p>
-            <h2>主要プロパティ</h2>
+            <h2>プロパティ</h2>
           </div>
           <div class="table-wrap">
             <table>
@@ -53,29 +54,29 @@
                 <tr>
                   <th>名前</th>
                   <th>型</th>
-                  <th>意味</th>
+                  <th>説明</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td><code>is_loaded</code></td>
                   <td><code>Boolean</code></td>
-                  <td>データが読み込まれているかを返します。</td>
+                  <td>内部にデータが読み込まれているとき <code>True</code> を返します。</td>
                 </tr>
                 <tr>
                   <td><code>data</code></td>
                   <td><code>Variant</code></td>
-                  <td>内部の 1 次元配列を返します。</td>
+                  <td>内部で保持している 1 次元配列を返します。</td>
                 </tr>
                 <tr>
                   <td><code>count</code></td>
                   <td><code>Long</code></td>
-                  <td>要素数を返します。</td>
+                  <td>読み込み済み要素数を返します。</td>
                 </tr>
                 <tr>
                   <td><code>item(index)</code></td>
                   <td><code>Variant</code></td>
-                  <td>指定位置の要素を返します。</td>
+                  <td>指定した位置の要素を返します。添字は 1 始まりです。</td>
                 </tr>
               </tbody>
             </table>
@@ -84,96 +85,162 @@
 
         <section class="panel" id="methods">
           <div class="section-heading">
-            <p class="eyebrow">Method Groups</p>
-            <h2>主要メソッド群</h2>
+            <p class="eyebrow">Methods</p>
+            <h2>メソッド</h2>
           </div>
           <div class="table-wrap">
             <table>
               <thead>
                 <tr>
                   <th>カテゴリ</th>
-                  <th>主なメソッド</th>
-                  <th>戻り値 / 効果</th>
+                  <th>シグネチャ</th>
+                  <th>戻り値</th>
+                  <th>説明</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td>読込</td>
-                  <td><code>read_col_range</code> <code>read_row_range</code> <code>read_array</code></td>
-                  <td>内部に 1 次元データをロードします。</td>
+                  <td><code>read_col_range(rng As Range)</code></td>
+                  <td><code>Sub</code></td>
+                  <td>縦方向の Range から 1 列分の値を読み込みます。</td>
+                </tr>
+                <tr>
+                  <td>読込</td>
+                  <td><code>read_row_range(rng As Range)</code></td>
+                  <td><code>Sub</code></td>
+                  <td>横方向の Range から 1 行分の値を読み込みます。</td>
+                </tr>
+                <tr>
+                  <td>読込</td>
+                  <td><code>read_array(arr As Variant)</code></td>
+                  <td><code>Sub</code></td>
+                  <td>1 次元配列をそのまま内部データとして読み込みます。</td>
                 </tr>
                 <tr>
                   <td>確認</td>
-                  <td><code>type_names</code></td>
-                  <td>要素ごとの型名配列を返します。</td>
+                  <td><code>type_names()</code></td>
+                  <td><code>Variant</code></td>
+                  <td>各要素の型名を 1 次元配列で返します。</td>
                 </tr>
                 <tr>
                   <td>条件判定</td>
-                  <td><code>eq</code> <code>ne</code> <code>gt</code> <code>ge</code> <code>lt</code> <code>le</code> <code>is_empty</code></td>
-                  <td>Boolean 配列のマスクを返します。</td>
+                  <td><code>eq(matchValue As Variant)</code></td>
+                  <td><code>Variant</code></td>
+                  <td>指定値と等しい要素を <code>True</code> にしたマスクを返します。</td>
                 </tr>
                 <tr>
-                  <td>型変換 / 整形</td>
-                  <td><code>cast_to_double_safe</code> <code>cast_to_string_safe</code> <code>cast_to_date_safe</code> <code>fill_empty</code> <code>map</code></td>
-                  <td>内部データを更新します。</td>
+                  <td>条件判定</td>
+                  <td><code>ne(matchValue As Variant)</code></td>
+                  <td><code>Variant</code></td>
+                  <td>指定値と等しくない要素を <code>True</code> にしたマスクを返します。</td>
+                </tr>
+                <tr>
+                  <td>条件判定</td>
+                  <td><code>gt(threshold As Variant)</code></td>
+                  <td><code>Variant</code></td>
+                  <td>指定値より大きい要素を <code>True</code> にしたマスクを返します。</td>
+                </tr>
+                <tr>
+                  <td>条件判定</td>
+                  <td><code>ge(threshold As Variant)</code></td>
+                  <td><code>Variant</code></td>
+                  <td>指定値以上の要素を <code>True</code> にしたマスクを返します。</td>
+                </tr>
+                <tr>
+                  <td>条件判定</td>
+                  <td><code>lt(threshold As Variant)</code></td>
+                  <td><code>Variant</code></td>
+                  <td>指定値より小さい要素を <code>True</code> にしたマスクを返します。</td>
+                </tr>
+                <tr>
+                  <td>条件判定</td>
+                  <td><code>le(threshold As Variant)</code></td>
+                  <td><code>Variant</code></td>
+                  <td>指定値以下の要素を <code>True</code> にしたマスクを返します。</td>
+                </tr>
+                <tr>
+                  <td>条件判定</td>
+                  <td><code>is_empty([treatBlankStringAsEmpty])</code></td>
+                  <td><code>Variant</code></td>
+                  <td>空値判定のマスクを返します。空文字を空として扱うかは引数で切り替えます。</td>
+                </tr>
+                <tr>
+                  <td>型変換</td>
+                  <td><code>cast_to_double_safe([emptyAsZero], [invalidAsZero], [treatDateAsInvalid])</code></td>
+                  <td><code>Sub</code></td>
+                  <td>内部データを安全に数値へ寄せます。変換失敗時の扱いは引数で制御します。</td>
+                </tr>
+                <tr>
+                  <td>型変換</td>
+                  <td><code>cast_to_string_safe([emptyAsBlank], [errorAsBlank])</code></td>
+                  <td><code>Sub</code></td>
+                  <td>内部データを文字列へ寄せます。空値やエラー値の扱いを調整できます。</td>
+                </tr>
+                <tr>
+                  <td>型変換</td>
+                  <td><code>cast_to_date_safe([invalidAsEmpty])</code></td>
+                  <td><code>Sub</code></td>
+                  <td>内部データを日付へ寄せます。日付化できない値は空にできます。</td>
+                </tr>
+                <tr>
+                  <td>整形</td>
+                  <td><code>fill_empty(fillValue As Variant[, treatBlankStringAsEmpty])</code></td>
+                  <td><code>Sub</code></td>
+                  <td>空値と判定された要素を指定値で埋めます。</td>
+                </tr>
+                <tr>
+                  <td>整形</td>
+                  <td><code>map(functionName As String)</code></td>
+                  <td><code>Sub</code></td>
+                  <td>指定した関数名を各要素へ順番に適用して内部データを書き換えます。</td>
                 </tr>
                 <tr>
                   <td>集計</td>
-                  <td><code>unique</code> <code>sum</code> <code>mean</code></td>
-                  <td>ユニーク値配列または数値を返します。</td>
+                  <td><code>unique()</code></td>
+                  <td><code>Variant</code></td>
+                  <td>重複を除いた値の配列を返します。</td>
+                </tr>
+                <tr>
+                  <td>集計</td>
+                  <td><code>sum()</code></td>
+                  <td><code>Double</code></td>
+                  <td>数値要素の合計を返します。</td>
+                </tr>
+                <tr>
+                  <td>集計</td>
+                  <td><code>mean()</code></td>
+                  <td><code>Double</code></td>
+                  <td>数値要素の平均を返します。</td>
                 </tr>
                 <tr>
                   <td>出力</td>
-                  <td><code>to_range_vertical</code> <code>to_range_horizontal</code></td>
-                  <td>シートへ縦または横に書き戻します。</td>
+                  <td><code>to_range_vertical(topLeft As Range)</code></td>
+                  <td><code>Sub</code></td>
+                  <td>内部データを縦 1 列としてシートへ書き戻します。</td>
+                </tr>
+                <tr>
+                  <td>出力</td>
+                  <td><code>to_range_horizontal(topLeft As Range)</code></td>
+                  <td><code>Sub</code></td>
+                  <td>内部データを横 1 行としてシートへ書き戻します。</td>
                 </tr>
                 <tr>
                   <td>状態管理</td>
-                  <td><code>clear</code></td>
-                  <td>内部状態を空に戻します。</td>
+                  <td><code>clear()</code></td>
+                  <td><code>Sub</code></td>
+                  <td>内部データと読み込み状態を初期化します。</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </section>
-
-        <section class="panel" id="signatures">
-          <div class="section-heading">
-            <p class="eyebrow">Key Signatures</p>
-            <h2>よく使うシグネチャ</h2>
-          </div>
-          <pre class="code-block"><code>Public Sub read_col_range(ByVal rng As Range)
-Public Function gt(ByVal threshold As Variant) As Variant
-Public Sub cast_to_double_safe(Optional ByVal emptyAsZero As Boolean = False, ...)
-Public Function sum() As Double
-Public Sub to_range_vertical(ByVal topLeft As Range)</code></pre>
-        </section>
-
-        <section class="panel" id="notes">
-          <div class="section-heading">
-            <p class="eyebrow">Usage Notes</p>
-            <h2>利用上の注意</h2>
-          </div>
-          <ul class="checklist">
-            <li>読込前に集計や判定を呼ぶと成立しないため、先に <code>read_*</code> 系を実行します。</li>
-            <li>数値集計前は <code>cast_to_double_safe</code> や <code>fill_empty</code> で前提をそろえるのが安全です。</li>
-            <li>戻り値のマスクは Variant 配列なので、そのまま Matrix や DataTable の抽出に流用できます。</li>
-          </ul>
-        </section>
       </main>
 
       <aside class="doc-sidebar">
         <div class="sidebar-card">
-          <p class="eyebrow">Vector Pages</p>
-          <h2>ローカルナビ</h2>
-          <nav class="local-nav-list" aria-label="Vector local navigation">
-            <a href="vector-setup.html">導入方法</a>
-            <a href="vector-examples.html">使い方</a>
-            <a href="vector-reference.html" class="current">リファレンス</a>
-          </nav>
-          <hr class="sidebar-sep">
           <p class="eyebrow">On This Page</p>
-          <h3>目次</h3>
+          <h2>目次</h2>
           <nav data-toc-source="#doc-content"></nav>
           <button class="mobile-toc-close" type="button" data-toc-close>閉じる</button>
         </div>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DataTable Setup | VBA_tools</title>
+  <title>DataTable 導入方法 | VBA_tools</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -22,80 +22,87 @@
       </div>
       <div class="hero-meta">
         <h1>DataTable</h1>
-        <p class="hero-subline">ヘッダー付きの表を列名ベースで扱うためのクラス</p>
+        <p class="hero-subline">ヘッダー付きの表を列名ベースで扱うためのクラスモジュール</p>
       </div>
+      <nav class="global-nav" aria-label="DataTable child pages">
+        <ul class="global-nav-list">
+          <li class="global-nav-item">
+            <a class="global-nav-link current" href="datatable-setup.html">導入方法</a>
+          </li>
+          <li class="global-nav-item">
+            <a class="global-nav-link" href="datatable-examples.html">使い方</a>
+          </li>
+          <li class="global-nav-item">
+            <a class="global-nav-link" href="datatable-reference.html">リファレンス</a>
+          </li>
+        </ul>
+      </nav>
 
       <button class="toc-toggle" type="button" data-toc-toggle aria-expanded="false">目次を開く</button>
     </header>
 
     <div class="docs-columns">
       <main class="doc-main" id="doc-content">
-        <section class="panel" id="import">
-          <div class="section-heading">
-            <p class="eyebrow">Import</p>
-            <h2>取り込むファイル</h2>
-          </div>
-          <div class="directory-stack">
-        <a href="https://github.com/kanko-tech/VBA_tools/blob/main/src/ExcelVBA/DataTable/DataTable.cls" target="_blank" rel="noreferrer">DataTable.cls<small>表形式ロジックの本体</small></a>
-        <a href="https://github.com/kanko-tech/VBA_tools/blob/main/src/ExcelVBA/Matrix/Matrix.cls" target="_blank" rel="noreferrer">Matrix.cls<small>内部で行列を扱うために必要</small></a>
-        <a href="https://github.com/kanko-tech/VBA_tools/blob/main/src/ExcelVBA/Vector/Vector.cls" target="_blank" rel="noreferrer">Vector.cls<small>列を Vector 化する API を使う場合に必要</small></a>
-          </div>
-        </section>
-
         <section class="panel" id="steps">
           <div class="section-heading">
             <p class="eyebrow">Steps</p>
             <h2>導入手順</h2>
           </div>
-          <div class="number-grid">
-            <article class="number-card"><strong>1</strong><p><code>DataTable</code> と依存クラスを VBE に取り込みます。</p></article>
-            <article class="number-card"><strong>2</strong><p>1 行目にヘッダーが入った矩形範囲を用意し、列名の重複を避けます。</p></article>
-            <article class="number-card"><strong>3</strong><p><code>read_range</code> で読み込み、条件に合う行を <code>filter_by_equals</code> などで抽出します。</p></article>
-            <article class="number-card"><strong>4</strong><p><code>to_range</code> で結果を書き戻し、ヘッダーごと確認します。</p></article>
+          <div class="step-stack">
+            <article class="step-item">
+              <div class="step-item-head">
+                <span class="step-number">1</span>
+                <h3>必要な <code>cls</code> をまとめてダウンロードする</h3>
+              </div>
+              <p><code>DataTable</code> は公開シグネチャの中で <code>Matrix</code> と <code>Vector</code> を参照します。そのため、次の 3 ファイルをそろえて保存します。</p>
+              <div class="inline-link-list">
+                <a href="https://raw.githubusercontent.com/kanko-tech/VBA_tools/main/src/ExcelVBA/DataTable/DataTable.cls" target="_blank" rel="noreferrer">DataTable.cls<small>列名付き表を扱う本体クラス</small></a>
+                <a href="https://raw.githubusercontent.com/kanko-tech/VBA_tools/main/src/ExcelVBA/Matrix/Matrix.cls" target="_blank" rel="noreferrer">Matrix.cls<small>内部で 2 次元データを扱うために必要</small></a>
+                <a href="https://raw.githubusercontent.com/kanko-tech/VBA_tools/main/src/ExcelVBA/Vector/Vector.cls" target="_blank" rel="noreferrer">Vector.cls<small>列を Vector として返す API で必要</small></a>
+              </div>
+            </article>
+            <article class="step-item">
+              <div class="step-item-head">
+                <span class="step-number">2</span>
+                <h3>Excel の VBE を開く</h3>
+              </div>
+              <p>対象ブックを開いた状態で <code>Alt + F11</code> を押し、Visual Basic Editor を開きます。Project Explorer が見えていない場合は <code>Ctrl + R</code> で表示します。</p>
+            </article>
+            <article class="step-item">
+              <div class="step-item-head">
+                <span class="step-number">3</span>
+                <h3>3 つのクラスモジュールをインポートする</h3>
+              </div>
+              <p>VBE のメニューから <code>ファイル &gt; ファイルのインポート</code> を選び、<code>Vector.cls</code>、<code>Matrix.cls</code>、<code>DataTable.cls</code> の順で取り込みます。Project Explorer の <code>Class Modules</code> に 3 つが並べば準備完了です。</p>
+            </article>
+            <article class="step-item">
+              <div class="step-item-head">
+                <span class="step-number">4</span>
+                <h3>正常に取り込めたか確認する</h3>
+              </div>
+              <p>依存クラスまで正しく入っていれば、イミディエイトウィンドウから <code>DataTable</code> をそのまま生成できます。</p>
+              <pre class="code-block"><code>? TypeName(New DataTable)</code></pre>
+            </article>
           </div>
-        </section>
-
-        <section class="panel" id="first-run">
-          <div class="section-heading">
-            <p class="eyebrow">First Run</p>
-            <h2>最初の実行コード</h2>
-          </div>
-          <pre class="code-block"><code>Sub DataTable_FirstRun()
-    Dim tbl As New DataTable
-    Dim result As DataTable
-
-    tbl.read_range Sheet1.Range("A1:D6"), hasHeader:=True
-    Set result = tbl.filter_by_equals("status", "OK")
-
-    result.to_range Sheet1.Range("G1"), includeHeader:=True
-End Sub</code></pre>
         </section>
 
         <section class="panel" id="checks">
           <div class="section-heading">
             <p class="eyebrow">Checks</p>
-            <h2>確認ポイント</h2>
+            <h2>インポート確認</h2>
           </div>
           <ul class="checklist">
-            <li>ヘッダー行に空欄や重複名がないこと</li>
-            <li>条件列の値の表記ゆれを事前にそろえておくこと</li>
-            <li>列前処理が必要なら <code>col_vector</code> で Vector に渡すこと</li>
+            <li>Project Explorer の <code>Class Modules</code> に <code>Vector</code>、<code>Matrix</code>、<code>DataTable</code> が並んでいること</li>
+            <li>イミディエイトウィンドウで <code>TypeName(New DataTable)</code> を実行し、<code>DataTable</code> と表示されること</li>
+            <li>このページではまだヘッダー付き表の読込や抽出には進まず、インポート確認だけで止めること</li>
           </ul>
         </section>
       </main>
 
       <aside class="doc-sidebar">
         <div class="sidebar-card">
-          <p class="eyebrow">DataTable Pages</p>
-          <h2>ローカルナビ</h2>
-          <nav class="local-nav-list">
-            <a href="datatable-setup.html" class="current">導入方法</a>
-            <a href="datatable-examples.html">使い方</a>
-            <a href="datatable-reference.html">リファレンス</a>
-          </nav>
-          <hr class="sidebar-sep">
           <p class="eyebrow">On This Page</p>
-          <h3>目次</h3>
+          <h2>目次</h2>
           <nav data-toc-source="#doc-content"></nav>
           <button class="mobile-toc-close" type="button" data-toc-close>閉じる</button>
         </div>

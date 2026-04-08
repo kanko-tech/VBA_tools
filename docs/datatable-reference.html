@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DataTable Reference | VBA_tools</title>
+  <title>DataTable リファレンス | VBA_tools</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script src="page.js" defer></script>
 </head>
-<body class="reference-page">
+<body>
   <div class="page-shell docs-layout">
     <header class="hero detail-hero">
       <div class="position-strip" aria-label="Page position">
@@ -22,30 +22,31 @@
       </div>
       <div class="hero-meta">
         <h1>DataTable</h1>
-        <p class="hero-subline">ヘッダー付きの表を列名ベースで扱うためのクラス</p>
+        <p class="hero-subline">ヘッダー付きの表を列名ベースで扱うためのクラスモジュール</p>
       </div>
+      <nav class="global-nav" aria-label="DataTable child pages">
+        <ul class="global-nav-list">
+          <li class="global-nav-item">
+            <a class="global-nav-link" href="datatable-setup.html">導入方法</a>
+          </li>
+          <li class="global-nav-item">
+            <a class="global-nav-link" href="datatable-examples.html">使い方</a>
+          </li>
+          <li class="global-nav-item">
+            <a class="global-nav-link current" href="datatable-reference.html">リファレンス</a>
+          </li>
+        </ul>
+      </nav>
 
       <button class="toc-toggle" type="button" data-toc-toggle aria-expanded="false">目次を開く</button>
     </header>
 
     <div class="docs-columns">
       <main class="doc-main" id="doc-content">
-        <section class="panel" id="class-outline">
-          <div class="section-heading">
-            <p class="eyebrow">Class Outline</p>
-            <h2>クラス概要</h2>
-          </div>
-          <div class="info-pills">
-            <div class="info-pill"><strong>責務</strong> ヘッダー付き表の読込、列名解決、抽出、更新、並び替え、出力</div>
-            <div class="info-pill"><strong>主な入力</strong> ヘッダー付き Range、Matrix、列名配列</div>
-            <div class="info-pill"><strong>主な出力</strong> DataTable、列配列、Vector、Range</div>
-          </div>
-        </section>
-
         <section class="panel" id="properties">
           <div class="section-heading">
             <p class="eyebrow">Properties</p>
-            <h2>主要プロパティ</h2>
+            <h2>プロパティ</h2>
           </div>
           <div class="table-wrap">
             <table>
@@ -53,19 +54,19 @@
                 <tr>
                   <th>名前</th>
                   <th>型</th>
-                  <th>意味</th>
+                  <th>説明</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td><code>is_loaded</code></td>
                   <td><code>Boolean</code></td>
-                  <td>表データが読み込まれているかを返します。</td>
+                  <td>ヘッダー付き表データが読み込まれているとき <code>True</code> を返します。</td>
                 </tr>
                 <tr>
                   <td><code>row_count</code></td>
                   <td><code>Long</code></td>
-                  <td>データ行数を返します。</td>
+                  <td>データ行数を返します。ヘッダー行は含みません。</td>
                 </tr>
                 <tr>
                   <td><code>col_count</code></td>
@@ -75,12 +76,12 @@
                 <tr>
                   <td><code>column_names</code></td>
                   <td><code>Variant</code></td>
-                  <td>列名配列を返します。</td>
+                  <td>列名を 1 次元配列で返します。</td>
                 </tr>
                 <tr>
                   <td><code>matrix</code></td>
                   <td><code>Matrix</code></td>
-                  <td>内部データを Matrix として返します。</td>
+                  <td>内部データ本体を保持する <code>Matrix</code> を返します。</td>
                 </tr>
               </tbody>
             </table>
@@ -89,96 +90,144 @@
 
         <section class="panel" id="methods">
           <div class="section-heading">
-            <p class="eyebrow">Method Groups</p>
-            <h2>主要メソッド群</h2>
+            <p class="eyebrow">Methods</p>
+            <h2>メソッド</h2>
           </div>
           <div class="table-wrap">
             <table>
               <thead>
                 <tr>
                   <th>カテゴリ</th>
-                  <th>主なメソッド</th>
-                  <th>戻り値 / 効果</th>
+                  <th>シグネチャ</th>
+                  <th>戻り値</th>
+                  <th>説明</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td>読込</td>
-                  <td><code>read_range</code> <code>read_matrix</code></td>
-                  <td>ヘッダー情報つきの表をロードします。</td>
+                  <td><code>read_range(rng As Range[, hasHeader])</code></td>
+                  <td><code>Sub</code></td>
+                  <td>Range から表を読み込みます。既定では先頭行をヘッダーとして扱います。</td>
+                </tr>
+                <tr>
+                  <td>読込</td>
+                  <td><code>read_matrix(src As Matrix, columnNames As Variant)</code></td>
+                  <td><code>Sub</code></td>
+                  <td>既存の Matrix と列名配列から DataTable を組み立てます。</td>
                 </tr>
                 <tr>
                   <td>列参照</td>
-                  <td><code>col</code> <code>col_vector</code></td>
-                  <td>指定列を配列または Vector として返します。</td>
+                  <td><code>col(columnName As String)</code></td>
+                  <td><code>Variant</code></td>
+                  <td>指定列を 1 次元配列で返します。</td>
+                </tr>
+                <tr>
+                  <td>列参照</td>
+                  <td><code>col_vector(columnName As String)</code></td>
+                  <td><code>Vector</code></td>
+                  <td>指定列を <code>Vector</code> として返します。</td>
                 </tr>
                 <tr>
                   <td>抽出</td>
-                  <td><code>filter_by_mask</code> <code>filter_by_equals</code> <code>filter_by_in</code> <code>filter_by_contains</code> <code>filter_by_all_equals</code> <code>filter_by_any_equals</code> <code>select_columns</code></td>
-                  <td>条件に合う DataTable を返します。</td>
+                  <td><code>filter_by_mask(mask As Variant)</code></td>
+                  <td><code>DataTable</code></td>
+                  <td>真偽値マスクに合う行だけを持つ新しい DataTable を返します。</td>
+                </tr>
+                <tr>
+                  <td>抽出</td>
+                  <td><code>filter_by_equals(columnName As String, matchValue As Variant)</code></td>
+                  <td><code>DataTable</code></td>
+                  <td>指定列が指定値と等しい行だけを返します。</td>
+                </tr>
+                <tr>
+                  <td>抽出</td>
+                  <td><code>filter_by_in(columnName As String, matchValues As Variant)</code></td>
+                  <td><code>DataTable</code></td>
+                  <td>指定列が候補配列のいずれかに一致する行だけを返します。</td>
+                </tr>
+                <tr>
+                  <td>抽出</td>
+                  <td><code>filter_by_contains(columnName As String, searchText As String[, caseSensitive])</code></td>
+                  <td><code>DataTable</code></td>
+                  <td>指定列に検索文字列を含む行だけを返します。</td>
+                </tr>
+                <tr>
+                  <td>抽出</td>
+                  <td><code>filter_by_all_equals(columnNames As Variant, matchValues As Variant)</code></td>
+                  <td><code>DataTable</code></td>
+                  <td>複数列がすべて一致する行だけを返します。</td>
+                </tr>
+                <tr>
+                  <td>抽出</td>
+                  <td><code>filter_by_any_equals(columnNames As Variant, matchValues As Variant)</code></td>
+                  <td><code>DataTable</code></td>
+                  <td>複数列のうちいずれかが一致する行だけを返します。</td>
+                </tr>
+                <tr>
+                  <td>抽出</td>
+                  <td><code>select_columns(columnNames As Variant)</code></td>
+                  <td><code>DataTable</code></td>
+                  <td>指定した列名だけを残した新しい DataTable を返します。</td>
                 </tr>
                 <tr>
                   <td>更新</td>
-                  <td><code>add_column</code> <code>rename_column</code> <code>set_by_mask</code> <code>set_by_equals</code> <code>set_column</code></td>
-                  <td>表の構造や値を更新します。</td>
+                  <td><code>add_column(columnName As String[, values])</code></td>
+                  <td><code>Sub</code></td>
+                  <td>指定名の列を追加します。値を省略すると空の列を追加します。</td>
                 </tr>
                 <tr>
-                  <td>整列</td>
-                  <td><code>sort_by</code></td>
-                  <td>指定列を基準に並び替えます。</td>
+                  <td>更新</td>
+                  <td><code>rename_column(oldName As String, newName As String)</code></td>
+                  <td><code>Sub</code></td>
+                  <td>既存の列名を変更します。</td>
+                </tr>
+                <tr>
+                  <td>更新</td>
+                  <td><code>sort_by(columnName As String[, ascending])</code></td>
+                  <td><code>Sub</code></td>
+                  <td>指定列を基準に表全体を並び替えます。</td>
+                </tr>
+                <tr>
+                  <td>更新</td>
+                  <td><code>set_by_mask(mask As Variant, columnName As String, newValue As Variant)</code></td>
+                  <td><code>Sub</code></td>
+                  <td>マスクに一致する行だけ、指定列の値をまとめて更新します。</td>
+                </tr>
+                <tr>
+                  <td>更新</td>
+                  <td><code>set_by_equals(conditionColumnName As String, matchValue As Variant, targetColumnName As String, newValue As Variant)</code></td>
+                  <td><code>Sub</code></td>
+                  <td>条件列が指定値と等しい行だけ、別の列を更新します。</td>
+                </tr>
+                <tr>
+                  <td>更新</td>
+                  <td><code>set_column(columnName As String, values As Variant)</code></td>
+                  <td><code>Sub</code></td>
+                  <td>指定列を配列値で丸ごと置き換えます。</td>
                 </tr>
                 <tr>
                   <td>出力</td>
-                  <td><code>to_range</code></td>
-                  <td>ヘッダー有無を選んでシートへ出力します。</td>
+                  <td><code>to_range(topLeft As Range[, includeHeader])</code></td>
+                  <td><code>Sub</code></td>
+                  <td>ヘッダー行の有無を選んで、指定セルから表を書き戻します。</td>
                 </tr>
                 <tr>
                   <td>状態管理</td>
-                  <td><code>clear</code></td>
-                  <td>内部状態を空に戻します。</td>
+                  <td><code>clear()</code></td>
+                  <td><code>Sub</code></td>
+                  <td>列名と内部データを初期化します。</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </section>
-
-        <section class="panel" id="signatures">
-          <div class="section-heading">
-            <p class="eyebrow">Key Signatures</p>
-            <h2>よく使うシグネチャ</h2>
-          </div>
-          <pre class="code-block"><code>Public Sub read_range(ByVal rng As Range, Optional ByVal hasHeader As Boolean = True)
-Public Function filter_by_equals(ByVal columnName As String, ByVal matchValue As Variant) As DataTable
-Public Sub add_column(ByVal columnName As String, Optional ByVal values As Variant)
-Public Sub sort_by(ByVal columnName As String, Optional ByVal ascending As Boolean = True)
-Public Sub to_range(ByVal topLeft As Range, Optional ByVal includeHeader As Boolean = True)</code></pre>
-        </section>
-
-        <section class="panel" id="notes">
-          <div class="section-heading">
-            <p class="eyebrow">Usage Notes</p>
-            <h2>利用上の注意</h2>
-          </div>
-          <ul class="checklist">
-            <li><code>read_range</code> でヘッダーを読む場合、1 行目に重複しない列名がある前提です。</li>
-            <li>列名ベースの API を使う前に、列名のゆれや余分な空白を整えておくと安全です。</li>
-            <li>列の値を前処理したい場合は <code>col_vector</code> で Vector に渡すと責務が分かれます。</li>
-          </ul>
-        </section>
       </main>
 
       <aside class="doc-sidebar">
         <div class="sidebar-card">
-          <p class="eyebrow">DataTable Pages</p>
-          <h2>ローカルナビ</h2>
-          <nav class="local-nav-list" aria-label="DataTable local navigation">
-            <a href="datatable-setup.html">導入方法</a>
-            <a href="datatable-examples.html">使い方</a>
-            <a href="datatable-reference.html" class="current">リファレンス</a>
-          </nav>
-          <hr class="sidebar-sep">
           <p class="eyebrow">On This Page</p>
-          <h3>目次</h3>
+          <h2>目次</h2>
           <nav data-toc-source="#doc-content"></nav>
           <button class="mobile-toc-close" type="button" data-toc-close>閉じる</button>
         </div>
