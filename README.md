@@ -1,14 +1,14 @@
-# VBA_tools
+# vba-tools
 
 VBA コーディングで使える汎用的で便利な部品をまとめたツールボックスです。  
 詳しい説明は GitHub Pages 側に整理しており、現在は `Excel VBA` カテゴリを公開しています。
 
-[VBA_tools Pages](https://kanko-tech.github.io/VBA_tools/)
+[vba-tools Pages](https://kanko-tech.github.io/vba-tools/)
 
 ## 入口
 
-- Pages Home: [VBA_tools](https://kanko-tech.github.io/VBA_tools/)
-- Excel VBA: [Excel VBA](https://kanko-tech.github.io/VBA_tools/excelvba.html)
+- Pages Home: [vba-tools](https://kanko-tech.github.io/vba-tools/)
+- Excel VBA: [Excel VBA](https://kanko-tech.github.io/vba-tools/excelvba.html)
 - Source: `src`
 - License: `LICENSE`
 

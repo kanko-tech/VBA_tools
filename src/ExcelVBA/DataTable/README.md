@@ -3,7 +3,7 @@
 `DataTable` は、Excel の表データを「列名つきのデータ」として扱うための VBA クラスモジュールです。  
 表の読み込み、条件抽出、列の追加・更新、並べ替え、シートへの書き戻しを、Worksheet のセル操作よりわかりやすく書けます。
 
-[詳しい説明は GitHub Pages の DataTable ページに整理しています。](https://kanko-tech.github.io/VBA_tools/datatable.html)
+[詳しい説明は GitHub Pages の DataTable ページに整理しています。](https://kanko-tech.github.io/vba-tools/datatable.html)
 
 ## これは誰向けか
 
@@ -47,11 +47,11 @@ End Sub
 
 ## 詳細情報
 
-- [DataTable](https://kanko-tech.github.io/VBA_tools/datatable.html)
-- [DataTable 導入方法](https://kanko-tech.github.io/VBA_tools/datatable-setup.html)
-- [DataTable 使い方](https://kanko-tech.github.io/VBA_tools/datatable-examples.html)
-- [DataTable リファレンス](https://kanko-tech.github.io/VBA_tools/datatable-reference.html)
-- [VBA_tools](https://kanko-tech.github.io/VBA_tools/)
+- [DataTable](https://kanko-tech.github.io/vba-tools/datatable.html)
+- [DataTable 導入方法](https://kanko-tech.github.io/vba-tools/datatable-setup.html)
+- [DataTable 使い方](https://kanko-tech.github.io/vba-tools/datatable-examples.html)
+- [DataTable リファレンス](https://kanko-tech.github.io/vba-tools/datatable-reference.html)
+- [vba-tools](https://kanko-tech.github.io/vba-tools/)
 - ソースコード: `src/ExcelVBA/DataTable`
 - ライセンス: `LICENSE`
 

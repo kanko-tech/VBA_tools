@@ -5,8 +5,8 @@
 
 ## 入口
 
-- GitHub Pages: [Excel VBA](https://kanko-tech.github.io/VBA_tools/excelvba.html)
-- Pages Home: [VBA_tools](https://kanko-tech.github.io/VBA_tools/)
+- GitHub Pages: [Excel VBA](https://kanko-tech.github.io/vba-tools/excelvba.html)
+- Pages Home: [vba-tools](https://kanko-tech.github.io/vba-tools/)
 - Repository Root: `../README.md`
 - Source Directory: `src/ExcelVBA`
 
@@ -18,9 +18,9 @@
 
 ## Pages
 
-- [Vector](https://kanko-tech.github.io/VBA_tools/vector.html)
-- [Matrix](https://kanko-tech.github.io/VBA_tools/matrix.html)
-- [DataTable](https://kanko-tech.github.io/VBA_tools/datatable.html)
+- [Vector](https://kanko-tech.github.io/vba-tools/vector.html)
+- [Matrix](https://kanko-tech.github.io/vba-tools/matrix.html)
+- [DataTable](https://kanko-tech.github.io/vba-tools/datatable.html)
 
 ## Page Structure
 

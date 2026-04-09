@@ -613,6 +613,7 @@ tbody tr:last-child td {
   background: rgba(255, 255, 255, 0.74);
   color: var(--muted);
   font-weight: 700;
+  text-decoration: none;
 }
 
 .directory-stack a.current {
